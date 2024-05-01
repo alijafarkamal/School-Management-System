@@ -60,9 +60,9 @@ public:
 	}
 };
 int other_staff::other_staff_number = 6;
-class staff_management : public other_staff {
+class other_staff_management : public other_staff {
 public:
-	staff_management() {
+	other_staff_management() {
 	}
 	void add() {
 		int choice;
@@ -207,8 +207,10 @@ int main()
 	{
 		cout << "Error Opening the File Student.txt\n";
 	}
-	staff_management other;
-	other.update();
+	teachers_management teacher;
+	teacher.update();
+	//other_staff_management other;
+	//other.update();
 	//attendence attend(students, count);
 	//attend.attendence_mark();
 

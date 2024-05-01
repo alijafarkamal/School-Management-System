@@ -11,6 +11,7 @@
 using namespace std;
 const string attend = "attendence.csv";
 const string file_other_staff = "other_staff.csv";
+const string file_teachers = "teachers.csv";
 class Student
 {
 protected:
@@ -89,9 +90,14 @@ protected:
 	string str_teacher_class;
 	string str_teacher_join;
 	string str_teacher_leave;
+	static int no_of_teachers;
 public:
 	teachers() {
-		ifstream file("teachers.csv");
+		this->teacheruploader();
+	}
+	void teacheruploader()
+	{
+		ifstream file(file_teachers);
 		string store_teacher;
 		file >> store_teacher;
 		istringstream is(store_teacher);
@@ -102,7 +108,7 @@ public:
 		}
 		//cout << store_teacher;
 		int index = 0;
-		for (int i = 0; i < 10; i++)
+		for (int i = 0; i < no_of_teachers; i++)
 		{
 if (getline(file, store_teacher)) {
 	istringstream iss(store_teacher);
@@ -120,6 +126,148 @@ if (getline(file, store_teacher)) {
 	index = 0;
 			}
 		}
+	}
+};
+int teachers::no_of_teachers = 11;
+class teachers_management : public teachers{
+public:
+	teachers_management() {
+	}
+	void add() {
+		int choice;
+		string mark("");
+		string str_add;
+	id_teacher_setter:
+		cout << "Enter his id \n";
+		cin >> str_add;
+		choice = str_teacher_ids.find(str_add);
+		if (choice != string::npos) {
+			cout << "id already exists\n";
+			goto id_teacher_setter;
+		}
+		mark += str_add + ',';
+		str_teacher_ids += " " + str_add;
+		cout << "Enter name \n";
+		cin >> str_add;
+		mark += str_add + ',';
+		str_teacher_name += " " + str_add;
+		cout << "Enter his salary\n";
+		cin >> str_add;
+		mark += str_add + ',';
+		str_teacher_salary += " " + str_add;
+		cout << "Enter his class \n";
+		cin >> str_add;
+		mark += str_add + ',';
+		str_teacher_class += " " + str_add;
+		cout << "Enter his joining year \n";
+		cin >> str_add;
+		mark += str_add + ',';
+		str_teacher_join += " " + str_add;
+		cout << "Enter his leaving year \n";
+		cin >> str_add;
+		mark += str_add + '\n';
+		no_of_teachers++;
+		str_teacher_leave += " " + str_add;
+		ofstream file(file_teachers, ios::app);
+		file << mark;
+		file.close();
+	}
+	void remove() {
+		int choice;
+		string str_remove;
+	ID_teachers_remover:
+		cout << "Enter his id\n";
+		cin >> str_remove;
+		//cout << other_staff_id;
+		choice = str_teacher_ids.find(str_remove);
+		if (choice == string::npos) {
+			cout << "ID not found\n";
+			goto ID_teachers_remover;
+		}
+		int comma_counter = count(str_teacher_ids.begin(), str_teacher_ids.begin() + choice, ' ');
+		//cout << comma_counter << endl; 
+		string data_store; int counter(0);
+		ifstream file(file_teachers);
+		string data_store_temp;
+		while (getline(file, data_store)) {
+			if (counter != comma_counter + 1) {
+				data_store_temp += data_store + "\n";// << endl;
+			}
+			counter++;
+			data_store.empty();
+		}
+		ofstream file_out(file_teachers);
+		//cout << data_store_temp;ffff
+		file_out << data_store_temp;
+		file_out.close();
+		no_of_teachers--;
+		str_teacher_ids.erase();
+		str_teacher_name.erase();
+		str_teacher_class .erase();
+		str_teacher_salary.erase();
+		str_teacher_join.erase();
+		str_teacher_leave.erase();
+		teacheruploader();
+		//cout << str_teacher_ids << endl;
+		//cout << str_teacher_name << endl;
+		//cout << str_teacher_salary << endl;
+		//cout << str_teacher_class << endl;
+		//cout << str_teacher_join << endl;
+		//cout << str_teacher_leave << endl;
+	}
+
+	void update() {
+		int reply;
+		string mark;
+		string str_add;
+	id_updater:
+		cout << "Enter his id \n";
+		cin >> str_add;
+		reply = str_teacher_ids.find(str_add);
+		if (reply == string::npos) {
+			cout << "id not found\n";
+			goto id_updater;
+		}
+		cout << "Enter his updated id\n";
+		cin >> str_add;
+		mark += str_add + ',';
+		//other_staff_id += " " + str_add;
+		cout << "Enter his updated name \n";
+		cin >> str_add;
+		mark += str_add + ',';
+		//other_staff_name += " " + str_add;
+		cout << "Enter his updated salary\n";
+		cin >> str_add;
+		mark += str_add + ',';
+		//other_staff_salary += " " + str_add;
+		cout << "Enter his updated class\n";
+		cin >> str_add;
+		mark += str_add + ',';
+		cout << "Enter his joining year\n";
+		cin >> str_add;
+		mark += str_add + ',';
+		cout << "Enter his leaving year\n";
+		cin >> str_add;
+		mark += str_add + '\n';
+		//other_staff_profession += " " + str_add;
+		string data_store;
+		ifstream file(file_teachers);
+		int comma_counter = count(str_teacher_ids.begin(), str_teacher_ids.begin() + reply, ' ');
+		int counter(0);
+		string data_store_temp;
+		while (getline(file, data_store)) {
+			if (counter != comma_counter + 1) {
+				data_store_temp += data_store + "\n";
+			}
+			else {
+				data_store_temp += mark;
+			}
+			data_store.empty();
+			counter++;
+		}
+		ofstream file_out(file_teachers);
+		file_out << data_store_temp;
+		file_out.close();
 	}
 };
 class Exam {
