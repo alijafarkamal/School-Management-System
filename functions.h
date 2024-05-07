@@ -7,7 +7,7 @@
 #include<cctype>
 #include<conio.h>
 #include<iomanip>
-
+#include"sqlite/sqlite3.h"
 using namespace std;
 const string attend = "attendence.csv";
 const string file_other_staff = "other_staff.csv";
@@ -93,41 +93,162 @@ protected:
 	static int no_of_teachers;
 public:
 	teachers() {
-		this->teacheruploader();
+		this->teacherUploader();
 	}
-	void teacheruploader()
-	{
-		ifstream file(file_teachers);
-		string store_teacher;
-		file >> store_teacher;
-		istringstream is(store_teacher);
-		store_teacher.clear();
-		string isa;
-		while (getline(is, isa, ',')) {
-			store_teacher += isa + " ";
+	void teacherUploader() {
+		sqlite3* db;
+		char* err;
+
+		int rc = sqlite3_open("teachers.db", &db);
+		if (rc != SQLITE_OK) {
+			cerr << "Error opening database: " << sqlite3_errmsg(db) << endl;
+			sqlite3_close(db);
+			return;
 		}
-		//cout << store_teacher;
-		int index = 0;
-		for (int i = 0; i < no_of_teachers; i++)
-		{
-if (getline(file, store_teacher)) {
-	istringstream iss(store_teacher);
-	string token;
-	while (getline(iss, token, ',')) {
-		index++;
-		token += " ";
-		if (index == 1) str_teacher_ids += token;
-		if (index == 2) str_teacher_name += token;
-		if (index == 3) str_teacher_salary += token;
-		if (index == 4) str_teacher_class += token;
-		if (index == 5) str_teacher_join += token;
-		if (index == 6) str_teacher_leave += token;
-	}
-	index = 0;
+
+		rc = sqlite3_exec(db, "CREATE TABLE IF NOT EXISTS teachers(id INT, name TEXT, salary INT, class INT, join_year INT, leave_year INT);", NULL, NULL, &err);
+		if (rc != SQLITE_OK) {
+			cerr << "Error creating table: " << err << endl;
+			sqlite3_free(err);
+			sqlite3_close(db);
+			return;
+		}
+
+		ifstream file("teachers.txt");
+		if (!file.is_open()) {
+			cerr << "Error opening file" << endl;
+			sqlite3_close(db);
+			return;
+		}
+
+		string line;
+		getline(file, line); // Skip header line
+		while (getline(file, line)) {
+			istringstream iss(line);
+			string id_str, name, salary_str, class_str, join_year_str, leave_year_str;
+			if (!(getline(iss, id_str, ',') &&
+				getline(iss, name, ',') &&
+				getline(iss, salary_str, ',') &&
+				getline(iss, class_str, ',') &&
+				getline(iss, join_year_str, ',') &&
+				getline(iss, leave_year_str))) {
+				cerr << "Error parsing line: " << line << endl;
+				continue;
+			}
+
+			int id, salary, class_, join_year, leave_year;
+			istringstream(id_str) >> id;
+			istringstream(salary_str) >> salary;
+			istringstream(class_str) >> class_;
+			istringstream(join_year_str) >> join_year;
+			istringstream(leave_year_str) >> leave_year;
+
+			ostringstream query;
+			query << "INSERT INTO teachers VALUES (" << id << ", '" << name << "', " << salary << ", " << class_ << ", " << join_year << ", " << leave_year << ");";
+			rc = sqlite3_exec(db, query.str().c_str(), NULL, NULL, &err);
+			if (rc != SQLITE_OK) {
+				cerr << "Error inserting data: " << err << endl;
+				sqlite3_free(err);
 			}
 		}
+
+		sqlite3_close(db);
+	}
+
+	void display() {
+		sqlite3* db;
+		char* err;
+		int rc = sqlite3_open("teachers.db", &db);
+		if (rc != SQLITE_OK) {
+			cerr << "Error opening database: " << sqlite3_errmsg(db) << endl;
+			sqlite3_close(db);
+			return;
+		}
+		ostringstream query;
+		query << "SELECT * FROM teachers;";
+		sqlite3_stmt* stmt;
+		rc = sqlite3_prepare_v2(db, query.str().c_str(), -1, &stmt, nullptr);
+		if (rc != SQLITE_OK) {
+			cerr << "Error preparing statement: " << sqlite3_errmsg(db) << endl;
+			sqlite3_close(db);
+			return;
+		}
+		str_teacher_heading = "id,name,salary,class,Join,Leave\n";
+		str_teacher_ids.clear();
+		str_teacher_name.clear();
+		str_teacher_salary.clear();
+		str_teacher_class.clear();
+		str_teacher_join.clear();
+		str_teacher_leave.clear();
+		while (sqlite3_step(stmt) == SQLITE_ROW) {
+			str_teacher_ids += to_string(sqlite3_column_int(stmt, 0)) + ",";
+			const char* name_cstr = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 1));
+			if (name_cstr) {
+				str_teacher_name += name_cstr;
+			}
+			str_teacher_name += ",";
+			str_teacher_salary += to_string(sqlite3_column_int(stmt, 2)) + ",";
+			str_teacher_class += to_string(sqlite3_column_int(stmt, 3)) + ",";
+			str_teacher_join += to_string(sqlite3_column_int(stmt, 4)) + ",";
+			str_teacher_leave += to_string(sqlite3_column_int(stmt, 5)) + ",";
+		}
+		// After the loop, remove the trailing comma from str_teacher_name
+		if (!str_teacher_name.empty()) {
+			str_teacher_name.pop_back(); // Remove the last character (the trailing comma)
+		}
+		cout << str_teacher_heading << endl << str_teacher_ids << endl << str_teacher_name << endl << str_teacher_leave << endl << str_teacher_class;
+		sqlite3_finalize(stmt);
+		sqlite3_close(db);
 	}
 };
+
+//class teachers {
+//protected:
+//	string str_teacher_heading;
+//	string str_teacher_ids;
+//	string str_teacher_name;
+//	string str_teacher_salary;
+//	string str_teacher_class;
+//	string str_teacher_join;
+//	string str_teacher_leave;
+//	static int no_of_teachers;
+//public:
+//	teachers() {
+//		this->teacheruploader();
+//	}
+//	void teacheruploader()
+//	{
+//		ifstream file(file_teachers);
+//		string store_teacher;
+//		file >> store_teacher;
+//		istringstream is(store_teacher);
+//		store_teacher.clear();
+//		string isa;
+//		while (getline(is, isa, ',')) {
+//			store_teacher += isa + " ";
+//		}
+//		//cout << store_teacher;
+//		int index = 0;
+//		for (int i = 0; i < no_of_teachers; i++)
+//		{
+//if (getline(file, store_teacher)) {
+//	istringstream iss(store_teacher);
+//	string token;
+//	while (getline(iss, token, ',')) {
+//		index++;
+//		token += " ";
+//		if (index == 1) str_teacher_ids += token;
+//		if (index == 2) str_teacher_name += token;
+//		if (index == 3) str_teacher_salary += token;
+//		if (index == 4) str_teacher_class += token;
+//		if (index == 5) str_teacher_join += token;
+//		if (index == 6) str_teacher_leave += token;
+//	}
+//	index = 0;
+//			}
+//		}
+//	}
+//};
 int teachers::no_of_teachers = 11;
 class teachers_management : public teachers{
 public:
@@ -207,7 +328,7 @@ public:
 		str_teacher_salary.erase();
 		str_teacher_join.erase();
 		str_teacher_leave.erase();
-		teacheruploader();
+		//teacheruploader();
 		//cout << str_teacher_ids << endl;
 		//cout << str_teacher_name << endl;
 		//cout << str_teacher_salary << endl;
@@ -269,10 +390,17 @@ public:
 		file_out << data_store_temp;
 		file_out.close();
 	}
+	void display() {
+		ifstream file(file_teachers);
+		string display_mode;
+		while (getline(file, display_mode)){
+		}
+		cout << display_mode;
+	}
 };
 class Exam {
 protected:
-	string subjects[10];
+	string subjects[5];
 	Student* student;
 	int count;
 public:
@@ -293,7 +421,9 @@ public:
 		int index = 0;
 		while (getline(file, subject) && index < 10) {
 			subjects[index++] = subject;
+			cout << subjects[index - 1] << endl;
 		}
+		//cout << subject[1];
 		file.close();
 	}
 
@@ -328,6 +458,82 @@ public:
 				cout << "not found or taught";
 				return;
 			}
+		}
+		cout << "Exam not done\n";
+	}
+};
+class grades {
+protected:
+	Student* student;
+	string subjects[5];
+	int count;
+public:
+
+	grades() {
+
+	}
+	grades(Student* student, int count) {
+		this->student = student;
+		this->count = count;
+		ifstream file("subjects.txt");
+		if (!file.is_open()) {
+			cout << "Error opening file: subject.txt" << endl;
+			return;
+		}
+
+		string subject;
+		int index = 0;
+		while (getline(file, subject) && index < 10) {
+			subjects[index++] = subject;
+		}
+		file.close();
+		ofstream gradesFile("grades.txt");
+		gradesFile << "ID,Name,Class,Subject,Grade\n";
+	}
+	void assignGrades() {
+		ofstream gradesFile("grades.txt", ios::app);
+		int  Class;
+		cout << "Enter the class for which you want to assign grades: ";
+		cin >> Class;
+		bool classFound = false;
+		for (int i = 0; i < count; i++) {
+			if (Class == student[i].getClass()) {
+				classFound = true;
+				cout << "Available subjects for assigning grades:\n";
+				for (int j = 0; j < 5; ++j) {
+					cout << j + 1 << " " << subjects[j] << endl;
+				}
+				cout << "Enter the subject for assigning grades: ";
+				string chosenSubject;
+				cin >> chosenSubject;
+				int subjectIndex = -1;
+				for (int j = 0; j < 5; ++j) {
+					if (subjects[j] == chosenSubject) {
+						subjectIndex = j;
+						break;
+					}
+				}
+				if (subjectIndex == -1) {
+					cout << "Invalid subject.\n";
+					return;
+				}
+				cout << "Enter grades for the subject \"" << chosenSubject << "\" for class " << Class << ":\n";
+				for (int k = 0; k < count; ++k) {
+					if (student[k].getClass() == Class) {
+						cout << "Enter grade for student " << student[k].getname() << ": ";
+						char grade;
+						cin >> grade;
+						grade = toupper(grade);
+						cout << "Grade for student " << student[k].getname() << " in " << chosenSubject << ": " << grade << endl;
+						gradesFile << student[k].getid() << "," << student[k].getname() << ",  " << Class << "," << chosenSubject << "," << grade << endl;
+
+					}
+				}
+				return;
+			}
+		}
+		if (!classFound) {
+			cout << "Class not found.\n";
 		}
 	}
 };
@@ -365,49 +571,53 @@ public:
 					cin >> option;
 					if (option == 1) {
 						file << "class,id,name,attendence\n";
-		for (int i = 0; i < count; i++)
-			if (enter == student[i].getClass()) {
-				cout << "Press p to mark presence or a to mark absence of student\n";
-				cout << "ID of the student " << student[i].getid() << endl;
-				cout << "Name of the student " << student[i].getname() << endl;
-				cin >> mark;
-				mark = to_string(student[i].getClass()) + ',' + to_string(student[i].getid()) +
-					',' + student[i].getname() + ',' + mark + "\n";
-				file << mark;
-				student_attendence += mark;
-				mark.empty();
-				cout << student_attendence << endl;
-			}
+						for (int i = 0; i < count; i++)
+							if (enter == student[i].getClass()) {
+								cout << "Press p to mark presence or a to mark absence of student\n";
+								cout << "ID of the student " << student[i].getid() << endl;
+								cout << "Name of the student " << student[i].getname() << endl;
+								cin >> mark;
+								mark = to_string(student[i].getClass()) + ',' + to_string(student[i].getid()) +
+									',' + student[i].getname() + ',' + mark + "\n";
+								file << mark;
+								student_attendence += mark;
+								mark.empty();
+								cout << student_attendence << endl;
+							}
 
-	}
+					}
 					else if (option == 2) {
-		cout << "class id name attendence\n";
-		for (option = 0; option < student_attendence.length(); option++)
-			if (student_attendence[option] == '\n') cout << endl;
-			else if (student_attendence[option] == ',') cout << " ";
-			else cout << student_attendence[option];
-		cout << endl;
-	}
-	else if (option == 3) {
-		cout << "Enter id of particular student\n";
-		cin >> mark;
-		size_t record = student_attendence.find(mark);
-		size_t end_record = student_attendence.find('\n', record);
-		mark.empty();
-		mark = student_attendence.substr(record, end_record - record);
-		cout << mark << endl;
-	}
-	else if (option == 4) {
-		Exam exam(student, count);
-		exam.conductExam();
-	}
+						cout << "class id name attendence\n";
+						for (option = 0; option < student_attendence.length(); option++)
+							if (student_attendence[option] == '\n') cout << endl;
+							else if (student_attendence[option] == ',') cout << " ";
+							else cout << student_attendence[option];
+						cout << endl;
+					}
+					else if (option == 3) {
+						cout << "Enter id of particular student\n";
+						cin >> mark;
+						size_t record = student_attendence.find(mark);
+						size_t end_record = student_attendence.find('\n', record);
+						mark.empty();
+						mark = student_attendence.substr(record, end_record - record);
+						cout << mark << endl;
+					}
+					else if (option == 4) {
+						Exam exam(student, count);
+						exam.conductExam();
+					}
+					else if (option == 5) {
+						grades grade(student, count);
+						grade.assignGrades();
+					}
 				}
 			}
 		}
 		file.close();
 	}
-
 };
+
 string toLower(const string& str) {
 	string result;
 	for (char ch : str) {
@@ -827,3 +1037,84 @@ void UpdatingData(Student* students, int count)
 void EditInfo();
 
 void DefaulterList();
+
+
+
+
+//class attendence : public teachers, public Exam {
+//	string student_attendence;
+//	Student* student;
+//	int count;
+//	ofstream file;
+//public:
+//	attendence(Student* student, int count) {
+//		this->student = student;
+//		this->count = count;
+//	}
+//	void attendence_mark() {
+//		ofstream file("attendence.csv");
+//		int enter;
+//		cout << "Do you want to login as a teacher? \n If yes press 1 else press 0\n";
+//		cin >> enter;
+//		if (enter == 1) {
+//			cout << "Enter your id\n";
+//			cin >> enter;
+//			if (str_teacher_ids.find(enter))
+//			{
+//				system("CLS");
+//				cout << "You have entered as the teacher of " << enter << " class\n";
+//				int option(0);
+//				string mark;
+//				while (option != -1) {
+//					cout << "Press 1 if you want to mark attendence\n";
+//					cout << "Press 2 if you want to see previous attendences\n";
+//					cout << "Press 3 if you want to see particular student attendence\n";
+//					cout << "Press 4 to conduct exam\n";
+//					cout << "press 5 to assign  grades\n";
+//					cout << "Press -1 to exit\n";
+//					cin >> option;
+//					if (option == 1) {
+//						file << "class,id,name,attendence\n";
+//		for (int i = 0; i < count; i++)
+//			if (enter == student[i].getClass()) {
+//				cout << "Press p to mark presence or a to mark absence of student\n";
+//				cout << "ID of the student " << student[i].getid() << endl;
+//				cout << "Name of the student " << student[i].getname() << endl;
+//				cin >> mark;
+//				mark = to_string(student[i].getClass()) + ',' + to_string(student[i].getid()) +
+//					',' + student[i].getname() + ',' + mark + "\n";
+//				file << mark;
+//				student_attendence += mark;
+//				mark.empty();
+//				cout << student_attendence << endl;
+//			}
+//
+//	}
+//					else if (option == 2) {
+//		cout << "class id name attendence\n";
+//		for (option = 0; option < student_attendence.length(); option++)
+//			if (student_attendence[option] == '\n') cout << endl;
+//			else if (student_attendence[option] == ',') cout << " ";
+//			else cout << student_attendence[option];
+//		cout << endl;
+//	}
+//	else if (option == 3) {
+//		cout << "Enter id of particular student\n";
+//		cin >> mark;
+//		size_t record = student_attendence.find(mark);
+//		size_t end_record = student_attendence.find('\n', record);
+//		mark.empty();
+//		mark = student_attendence.substr(record, end_record - record);
+//		cout << mark << endl;
+//	}
+//	else if (option == 4) {
+//		Exam exam(student, count);
+//		exam.conductExam();
+//	}
+//				}
+//			}
+//		}
+//		file.close();
+//	}
+//
+//};

@@ -129,6 +129,8 @@
   <ItemGroup>
     <ClCompile Include="first.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="sqlite\shell.c" />
+    <ClCompile Include="sqlite\sqlite3.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="functions.h" />

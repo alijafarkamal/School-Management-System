@@ -16,7 +16,8 @@
 #include<cctype>
 #include<conio.h>
 #include<iomanip>
-#include<sqlite3.h>
+#include"functions.h"
+#include"sqlite/sqlite3.h"
 #include"functions.h"
 using namespace std;
 class other_staff {
@@ -181,34 +182,83 @@ public:
 			file_out << data_store_temp;
 			file_out.close();	
 	}
+	void display() {
+		ifstream file(file_other_staff);
+		string display_mode;
+		while (getline(file, display_mode)) {
+		}
+		cout << display_mode;
+	}
 };
 int main()
 {
-	int count = NoofStudents();
-	Student* students = new Student[count];
-	ifstream input("student.txt");
-	string name, password, fathername;
-	int id, fee, invalidTry = 3, choice = 0, PendingBalance, Class, InnerChoice;
+	teachers t;
+	t.display();
 
-	if (input.is_open())
-	{
-		for (int i = 0; i < count; i++)
-		{
-			input >> id >> fee >> PendingBalance >> Class;
-			getline(input, name, '#');
-			getline(input, fathername, '\n');
 
-			students[i] = Student(name, fathername, id, fee, PendingBalance, Class);
 
-		}
-		input.close();
-	}
-	else
-	{
-		cout << "Error Opening the File Student.txt\n";
-	}
-	teachers_management teacher;
-	teacher.update();
+	//char* err;
+	//sqlite3* db;
+	//sqlite3_stmt* stmt;
+	//sqlite3_open("mydb.db", &db);
+	//int rc = sqlite3_exec(db,"CREATE TABLE IF NOT EXISTS algolancer(x1 INT, x2 INT, name varchar(100));", NULL, NULL,&err);
+	//if (rc != SQLITE_OK)
+	//	cout << "Error ! "<<err;
+	//else cout << "Succeeded \n";
+	//	for (int i = 0; i < 10; i++) {
+	//		string query = "insert into algolancer VALUES ("+to_string(i)+", "+to_string(i+5) +", 'nadjib');";
+	//		rc = sqlite3_exec(db, query.c_str(), NULL, NULL, &err);
+	//		cout << query << endl;
+	//			if (rc != SQLITE_OK)
+	//			{
+	//				cout << "error \n";
+	//			}
+	//	}
+	//	sqlite3_prepare_v2(db, "select x1, x2, name from algolancer", -1, &stmt, 0);
+	//	int a1, a2; const unsigned char* name;
+	//	sqlite3_step(stmt);
+	//	a1 = sqlite3_column_int(stmt,0);
+	//	a2 = sqlite3_column_int(stmt,1);
+	//	name = sqlite3_column_text(stmt, 2);
+	//	cout << "a1 : " << a1 << endl;
+	//	cout << "a2 : " << a2 << endl;
+	//	cout << "name : " << name << endl;
+	////int rc = sqlite3_open("test.db", &db);
+
+	////if (rc) {
+	////	std::cerr << "Can't open database: " << sqlite3_errmsg(db) << std::endl;
+	////	return 1;
+	////}
+	////else {
+	////	std::cout << "Opened database successfully" << std::endl;
+	////}
+
+	////sqlite3_close(db);
+	//int count = NoofStudents();
+	//Student* students = new Student[count];
+	//ifstream input("student.txt");
+	//string name, password, fathername;
+	//int id, fee, invalidTry = 3, choice = 0, PendingBalance, Class, InnerChoice;
+
+	//if (input.is_open())
+	//{
+	//	for (int i = 0; i < count; i++)
+	//	{
+	//		input >> id >> fee >> PendingBalance >> Class;
+	//		getline(input, name, '#');
+	//		getline(input, fathername, '\n');
+
+	//		students[i] = Student(name, fathername, id, fee, PendingBalance, Class);
+
+	//	}
+	//	input.close();
+	//}
+	//else
+	//{
+	//	cout << "Error Opening the File Student.txt\n";
+	//}
+	//teachers_management teacher;
+	//teacher.update();
 	//other_staff_management other;
 	//other.update();
 	//attendence attend(students, count);
