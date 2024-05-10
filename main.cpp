@@ -1,11 +1,3 @@
-//using namespace std;
-
-//int main() {
-//	attendence att;
-//	att.attendence_mark();
-//	system("pause");
-//	return 0;
-//}
 
 #include<iostream>
 #include<fstream>
@@ -101,14 +93,14 @@ public:
 			ID_remover:
 			cout << "Enter his id\n";
 			cin >> str_remove;
-			//cout << other_staff_id;
+			cout << other_staff_id;
 			choice = other_staff_id.find(str_remove);
 			if (choice == string::npos) {
 				cout << "ID not found\n";
 				goto ID_remover;
 			}
 			int comma_counter = count(other_staff_id.begin(), other_staff_id.begin() + choice, ' ');
-			//cout << comma_counter << endl; 
+			cout << comma_counter << endl; 
 			string data_store; int counter(0);
 			ifstream file(file_other_staff);
 			string data_store_temp;
@@ -120,7 +112,7 @@ public:
 				data_store.empty();
 			}
 			ofstream file_out(file_other_staff);
-			//cout << data_store_temp;ffff
+			cout << data_store_temp;
 			file_out << data_store_temp;
 			file_out.close();
 			other_staff_number--;
@@ -150,19 +142,19 @@ public:
 			cout << "Enter his updated id\n";
 			cin >> str_add;
 			mark += str_add + ',';
-			//other_staff_id += " " + str_add;
+			other_staff_id += " " + str_add;
 			cout << "Enter his updated name \n";
 			cin >> str_add;
 			mark += str_add + ',';
-			//other_staff_name += " " + str_add;
+			other_staff_name += " " + str_add;
 			cout << "Enter his updated salary\n";
 			cin >> str_add;
 			mark += str_add + ',';
-			//other_staff_salary += " " + str_add;
+			other_staff_salary += " " + str_add;
 			cout << "Enter his updated Profession\n";
 			cin >> str_add;
 			mark += str_add + '\n';
-			//other_staff_profession += " " + str_add;
+			other_staff_profession += " " + str_add;
 			string data_store;
 			ifstream file(file_other_staff);
 			int comma_counter = count(other_staff_id.begin(), other_staff_id.begin() + reply, ' ');
@@ -192,154 +184,155 @@ public:
 };
 int main()
 {
-	teachers t;
-	t.display();
-
-
-
-	//char* err;
-	//sqlite3* db;
-	//sqlite3_stmt* stmt;
-	//sqlite3_open("mydb.db", &db);
-	//int rc = sqlite3_exec(db,"CREATE TABLE IF NOT EXISTS algolancer(x1 INT, x2 INT, name varchar(100));", NULL, NULL,&err);
-	//if (rc != SQLITE_OK)
-	//	cout << "Error ! "<<err;
-	//else cout << "Succeeded \n";
-	//	for (int i = 0; i < 10; i++) {
-	//		string query = "insert into algolancer VALUES ("+to_string(i)+", "+to_string(i+5) +", 'nadjib');";
-	//		rc = sqlite3_exec(db, query.c_str(), NULL, NULL, &err);
-	//		cout << query << endl;
-	//			if (rc != SQLITE_OK)
-	//			{
-	//				cout << "error \n";
-	//			}
-	//	}
-	//	sqlite3_prepare_v2(db, "select x1, x2, name from algolancer", -1, &stmt, 0);
-	//	int a1, a2; const unsigned char* name;
-	//	sqlite3_step(stmt);
-	//	a1 = sqlite3_column_int(stmt,0);
-	//	a2 = sqlite3_column_int(stmt,1);
-	//	name = sqlite3_column_text(stmt, 2);
-	//	cout << "a1 : " << a1 << endl;
-	//	cout << "a2 : " << a2 << endl;
-	//	cout << "name : " << name << endl;
-	////int rc = sqlite3_open("test.db", &db);
-
-	////if (rc) {
-	////	std::cerr << "Can't open database: " << sqlite3_errmsg(db) << std::endl;
-	////	return 1;
-	////}
-	////else {
-	////	std::cout << "Opened database successfully" << std::endl;
-	////}
-
-	////sqlite3_close(db);
-	//int count = NoofStudents();
-	//Student* students = new Student[count];
-	//ifstream input("student.txt");
-	//string name, password, fathername;
-	//int id, fee, invalidTry = 3, choice = 0, PendingBalance, Class, InnerChoice;
-
-	//if (input.is_open())
-	//{
-	//	for (int i = 0; i < count; i++)
-	//	{
-	//		input >> id >> fee >> PendingBalance >> Class;
-	//		getline(input, name, '#');
-	//		getline(input, fathername, '\n');
-
-	//		students[i] = Student(name, fathername, id, fee, PendingBalance, Class);
-
-	//	}
-	//	input.close();
-	//}
-	//else
-	//{
-	//	cout << "Error Opening the File Student.txt\n";
-	//}
-	//teachers_management teacher;
+	int count = NoofStudents();
+	Student* students = new Student[count];
+	ifstream input("student.txt");
+	string name, password, fathername;
+	teachers_management teacher;
 	//teacher.update();
-	//other_staff_management other;
+	other_staff_management other;
 	//other.update();
-	//attendence attend(students, count);
-	//attend.attendence_mark();
+	teacher_functionalities teacher_func(students, count);
+	//teacher_func.attendence_mark();
+	int id, fee, invalidTry = 3, choice = 0, PendingBalance, Class, InnerChoice;
 
-	//invalid:
-	//	if (invalidTry > 0)
-	//	{
-	//		cout << "Enter the Password To Continue\n";
-	//		getline(cin, password);
-	//		if (password != "hello")
-	//		{
-	//			system("cls");
-	//			cout << "Invalid Password\n";
-	//			invalidTry--;
-	//			cout << "Remaining Tries: " << invalidTry << endl;
-	//			goto invalid;
-	//		}
-	//		else
-	//		{
-	//			system("cls");
-	//			cout << "You Successfully Entered as ADMIN\n";
-	//		}
-	//		while (choice != 7)
-	//		{
-	//			system("cls");
-	//			cout << "WELCOME TO MAIN MENU\n";
-	//			cout << "1. To Display Student Records\n";
-	//			cout << "2. To Display Details Of a Particular Student\n";
-	//			cout << "3. To Give and OverView\n";
-	//			cout << "4. To Enter Financial Mode\n";
-	//			cout << "5. To Enter A New Student\n";
-	//			cout << "6. To Remove a Student\n";
-	//			cout << "7. To Exit\n";
-	//			cin >> choice;
-	//			if (choice == 1)
-	//			{
-	//				Display(students, count);
-	//			}
-	//			else if (choice == 2)
-	//			{
-	//				system("cls");
-	//				cout << "1. To Search By Father Name\n";
-	//				cout << "2. To Search By ID Number\n";
-	//				cin >> InnerChoice;
-	//				if (InnerChoice == 1)
-	//				{
-	//					SearchFamily(students, count);
-	//				}
-	//				else if (InnerChoice == 2)
-	//				{
-	//					Search(students, count);
-	//				}
-	//			}
-	//			else if (choice == 3)
-	//			{
-	//				overview(students, count);
-	//			}
-	//			else if (choice == 4)
-	//			{
-	//				financial(students, count);
-	//				UpdatingData(students, count);
-	//			}
-	//			else if (choice == 5)
-	//			{
-	//				students = addStudent(students, count);
-	//				UpdatingData(students, count);
-	//			}
-	//			else if (choice == 6)
-	//			{
-	//				students = removeStudent(students, count);
-	//				UpdatingData(students, count);
-	//			}
-	//		}
-	//	}
-	//	else
-	//	{
-	//		cout << "Crashed !\n";
-	//		return 0;
-	//	}
-	//	delete[] students;
+	if (input.is_open())
+	{
+		for (int i = 0; i < count; i++)
+		{
+			input >> id >> fee >> PendingBalance >> Class;
+
+
+			getline(input, name, '#');
+			getline(input, fathername, '\n');
+
+			students[i] = Student(name, fathername, id, fee, PendingBalance, Class);
+
+		}
+		input.close();
+	}
+	else
+	{
+		cout << "Error Opening the File Student.txt\n";
+	}
+
+invalid:
+	if (invalidTry > 0)
+	{
+		cout << "Enter the Password To Continue\n";
+		getline(cin, password);
+		if (password != "hello")
+		{
+			system("cls");
+			cout << "Invalid Password\n";
+			invalidTry--;
+			cout << "Remaining Tries: " << invalidTry << endl;
+			goto invalid;
+		}
+		else
+		{
+			system("cls");
+			cout << "You Successfully Entered as ADMIN\n";
+		}
+		while (choice != -1)
+		{
+			system("cls");
+			cout << "WELCOME TO MAIN MENU\n";
+			cout << "1. To Display Student Records\n";
+			cout << "2. To Display Details Of a Particular Student\n";
+			cout << "3. To Give and OverView\n";
+			cout << "4. To Enter Financial Mode\n";
+			cout << "5. To Enter A New Student\n";
+			cout << "6. To Remove a Student\n";
+			cout << "7. To Edit Student Details\n";
+			cout << "8. To Make A Defaulter List\n";
+			cout << "9. To enter as a teacher\n";
+			cout << "10. To manage staff\n";
+			cout << "11. To manage teachers\n";
+			cout << "Press -1 to exit \n";
+			cin >> choice;
+			if (choice == 1)
+			{
+				Display(students, count);
+			}
+			else if (choice == 2)
+			{
+				system("cls");
+				cout << "1. To Search By Father Name\n";
+				cout << "2. To Search By ID Number\n";
+				cin >> InnerChoice;
+				if (InnerChoice == 1)
+				{
+					SearchFamily(students, count);
+				}
+				else if (InnerChoice == 2)
+				{
+					Search(students, count);
+				}
+			}
+			else if (choice == 3)
+			{
+				overview(students, count);
+			}
+			else if (choice == 4)
+			{
+				financial(students, count);
+				UpdatingData(students, count);
+			}
+			else if (choice == 5)
+			{
+				students = addStudent(students, count);
+				UpdatingData(students, count);
+			}
+			else if (choice == 6)
+			{
+				students = removeStudent(students, count);
+				UpdatingData(students, count);
+			}
+			else if (choice == 7)
+			{
+				EditInfo(students, count);
+				UpdatingData(students, count);
+			}
+			else if (choice == 8)
+			{
+				DefaulterList(students, count);
+			}
+			else if (choice == 9) {
+				teacher_func.attendence_mark();
+			}
+			else if (choice == 10) {
+				cout << "Press 1 to add other staff \n";
+				cout << "Press 2 to update other staff \n";
+				cout << "Press 3 to remove other staff \n";
+				cout << "Press 4 to display other staff \n";
+				cout << "Press 5 to exit\n";
+				cin >> choice;
+				if (choice == 1) other.add();
+				else if (choice == 2) other.update();
+				else if (choice == 3) other.remove();
+				else if (choice == 4) other.display();
+			}
+			else if (choice == 11) {
+				cout << "Press 1 to add teacher\n";
+				cout << "Press 2 to update teacher\n";
+				cout << "Press 3 to remove teacher\n";
+				cout << "Press 4 to display teacher\n";
+				cout << "Press 5 to exit\n";
+				cin >> choice;
+				if (choice == 1) teacher.add();
+				else if (choice == 2) teacher.update();
+				else if (choice == 3) teacher.remove();
+				else if (choice == 4) teacher.display();
+			}
+		}
+	}
+	else
+	{
+		cout << "Crashed !\n";
+		return 0;
+	}
+	delete[] students;
 	system("pause");
 	return 0;
 }

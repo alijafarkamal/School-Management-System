@@ -14,13 +14,15 @@ const string file_other_staff = "other_staff.csv";
 const string file_teachers = "teachers.csv";
 class Student
 {
-protected:
+private:
+
 	string name;
 	string FatherName;
 	int id;
 	int fee;
 	int PendingBalance;
 	int Class;
+
 public:
 	Student()
 	{
@@ -80,6 +82,37 @@ public:
 	{
 		PendingBalance = temp;
 	}
+	void setid(int temp)
+	{
+		id = temp;
+	}
+	void setname(string temp)
+	{
+		name = temp;
+	}
+	void setfathername(string temp)
+	{
+		FatherName = temp;
+	}
+	void setfee(int temp)
+	{
+		fee = temp;
+	}
+	void setclass(int temp)
+	{
+		Class = temp;
+	}
+	friend ostream& operator <<(ostream& output, Student& obj)
+	{
+		cout << "ID: " << obj.getid() << endl;
+		cout << "Class : " << obj.getClass() << endl;
+		cout << "Name: " << obj.getname() << endl;
+		cout << "Father Name: " << obj.getfathername() << endl;
+		cout << "Fee: " << obj.getfee() << endl;
+		cout << "Pending Balance : " << obj.getPendingBalance() << endl;
+		cout << endl;
+		return output;
+	}
 };
 class teachers {
 protected:
@@ -101,14 +134,14 @@ public:
 
 		int rc = sqlite3_open("teachers.db", &db);
 		if (rc != SQLITE_OK) {
-			cerr << "Error opening database: " << sqlite3_errmsg(db) << endl;
+			cout << "Error opening database: " << sqlite3_errmsg(db) << endl;
 			sqlite3_close(db);
 			return;
 		}
 
 		rc = sqlite3_exec(db, "CREATE TABLE IF NOT EXISTS teachers(id INT, name TEXT, salary INT, class INT, join_year INT, leave_year INT);", NULL, NULL, &err);
 		if (rc != SQLITE_OK) {
-			cerr << "Error creating table: " << err << endl;
+			cout << "Error creating table: " << err << endl;
 			sqlite3_free(err);
 			sqlite3_close(db);
 			return;
@@ -116,7 +149,7 @@ public:
 
 		ifstream file("teachers.txt");
 		if (!file.is_open()) {
-			cerr << "Error opening file" << endl;
+			cout << "Error opening file" << endl;
 			sqlite3_close(db);
 			return;
 		}
@@ -132,7 +165,7 @@ public:
 				getline(iss, class_str, ',') &&
 				getline(iss, join_year_str, ',') &&
 				getline(iss, leave_year_str))) {
-				cerr << "Error parsing line: " << line << endl;
+				cout << "Error parsing line: " << line << endl;
 				continue;
 			}
 
@@ -147,7 +180,7 @@ public:
 			query << "INSERT INTO teachers VALUES (" << id << ", '" << name << "', " << salary << ", " << class_ << ", " << join_year << ", " << leave_year << ");";
 			rc = sqlite3_exec(db, query.str().c_str(), NULL, NULL, &err);
 			if (rc != SQLITE_OK) {
-				cerr << "Error inserting data: " << err << endl;
+				cout << "Error inserting data: " << err << endl;
 				sqlite3_free(err);
 			}
 		}
@@ -160,7 +193,7 @@ public:
 		char* err;
 		int rc = sqlite3_open("teachers.db", &db);
 		if (rc != SQLITE_OK) {
-			cerr << "Error opening database: " << sqlite3_errmsg(db) << endl;
+			cout << "Error opening database: " << sqlite3_errmsg(db) << endl;
 			sqlite3_close(db);
 			return;
 		}
@@ -169,7 +202,7 @@ public:
 		sqlite3_stmt* stmt;
 		rc = sqlite3_prepare_v2(db, query.str().c_str(), -1, &stmt, nullptr);
 		if (rc != SQLITE_OK) {
-			cerr << "Error preparing statement: " << sqlite3_errmsg(db) << endl;
+			cout << "Error preparing statement: " << sqlite3_errmsg(db) << endl;
 			sqlite3_close(db);
 			return;
 		}
@@ -202,53 +235,7 @@ public:
 	}
 };
 
-//class teachers {
-//protected:
-//	string str_teacher_heading;
-//	string str_teacher_ids;
-//	string str_teacher_name;
-//	string str_teacher_salary;
-//	string str_teacher_class;
-//	string str_teacher_join;
-//	string str_teacher_leave;
-//	static int no_of_teachers;
-//public:
-//	teachers() {
-//		this->teacheruploader();
-//	}
-//	void teacheruploader()
-//	{
-//		ifstream file(file_teachers);
-//		string store_teacher;
-//		file >> store_teacher;
-//		istringstream is(store_teacher);
-//		store_teacher.clear();
-//		string isa;
-//		while (getline(is, isa, ',')) {
-//			store_teacher += isa + " ";
-//		}
-//		//cout << store_teacher;
-//		int index = 0;
-//		for (int i = 0; i < no_of_teachers; i++)
-//		{
-//if (getline(file, store_teacher)) {
-//	istringstream iss(store_teacher);
-//	string token;
-//	while (getline(iss, token, ',')) {
-//		index++;
-//		token += " ";
-//		if (index == 1) str_teacher_ids += token;
-//		if (index == 2) str_teacher_name += token;
-//		if (index == 3) str_teacher_salary += token;
-//		if (index == 4) str_teacher_class += token;
-//		if (index == 5) str_teacher_join += token;
-//		if (index == 6) str_teacher_leave += token;
-//	}
-//	index = 0;
-//			}
-//		}
-//	}
-//};
+
 int teachers::no_of_teachers = 11;
 class teachers_management : public teachers{
 public:
@@ -421,57 +408,76 @@ public:
 		int index = 0;
 		while (getline(file, subject) && index < 10) {
 			subjects[index++] = subject;
-			cout << subjects[index - 1] << endl;
+			//cout << subjects[index - 1] << endl;
 		}
 		//cout << subject[1];
 		file.close();
 	}
 
 	void conductExam() {
-
-		int Class;
-		cout << "Enter the class for which you want to conduct the exam: ";
+		system("cls");
+		string Class;
+		
+		cout << "Enter the class for which you want to conduct the exam : ";
 		cin >> Class;
-		bool True = false;
-		for (int i = 0; i < count && !True; i++) {
-			//cin.ignore();
-			if (Class == student[i].getClass()) {
-				True = true;
+
+		bool classFound = false;
+		for (int i = 0; i < count; i++) {
+			if (Class == to_string(student[i].getClass())) {
+				classFound = true;
 				cout << "Available subjects for the exam:\n";
 				for (int j = 0; j < 5; ++j) {
-					cout << j + 1 << " " << subjects[j] << endl;
+					cout  << j + 1 << " " << subjects[j] << endl;
 				}
-
+				break;
 			}
 		}
-		if (!True) return;
-		cout << "Enter the subject for the exam: ";
 
+		if (!classFound) {
+			cout << "Class not found.\n";
+			return;
+		}
+
+		string examType;
+		d:
+		cout << "Enter the type of exam (midterm/final): ";
+		cin >> examType;
+		if (examType != "midterm" && examType != "final") {
+			cout << "this type of exam not being conduct in tis school\n";
+			goto d;
+		}
 		string chosenSubject;
+		cout << "Enter the subject for the " << examType << " exam : ";
+		r:
 		cin >> chosenSubject;
+
 		for (int i = 0; i < 5; i++) {
-			if (subjects[i] == (chosenSubject)) {
-				cout << "exam is done \n";
-				return;
-			}
-			else {
-				cout << "not found or taught";
+			if (subjects[i] == chosenSubject) {
+				cout << "Exam is done\n";
 				return;
 			}
 		}
-		cout << "Exam not done\n";
+		cout << "Subject not taught in this school \n";
+		cout << "enter the avaliable subjects : ";
+			goto r;
+		//_getch();
 	}
+	~Exam() {
+		delete[] student;
+		student = nullptr;
+	}
+
 };
 class grades {
 protected:
 	Student* student;
 	string subjects[5];
 	int count;
+	string midTermGrades[20]; // Array to store mid-term grades
+	string finalGrades[20];   // Array to store final exam grades
 public:
+	grades() {}
 
-	grades() {
-
-	}
 	grades(Student* student, int count) {
 		this->student = student;
 		this->count = count;
@@ -483,67 +489,240 @@ public:
 
 		string subject;
 		int index = 0;
-		while (getline(file, subject) && index < 10) {
+		while (getline(file, subject) && index < 5) {
 			subjects[index++] = subject;
 		}
 		file.close();
-		ofstream gradesFile("grades.txt");
-		gradesFile << "ID,Name,Class,Subject,Grade\n";
 	}
+
 	void assignGrades() {
-		ofstream gradesFile("grades.txt", ios::app);
-		int  Class;
-		cout << "Enter the class for which you want to assign grades: ";
+		system("cls");
+		ofstream MgradesFile("midtermgrades.txt", ios::app);
+		MgradesFile << "CLass," << "subject," << "grade," << "id"<<"\n";
+		ofstream FgradesFile("finalgrades.txt", ios::app);
+
+		FgradesFile << "CLass," << "subject," << "grade," << "id" << "\n";
+		string Class;
+		system("cls");
+
+	l:
+		cout << "Enter the class for which you want to assign grades : ";
 		cin >> Class;
 		bool classFound = false;
 		for (int i = 0; i < count; i++) {
-			if (Class == student[i].getClass()) {
+			if (Class == to_string(student[i].getClass())) {
 				classFound = true;
-				cout << "Available subjects for assigning grades:\n";
+				cout << "Subjects for assigning grades:\n";
 				for (int j = 0; j < 5; ++j) {
 					cout << j + 1 << " " << subjects[j] << endl;
 				}
-				cout << "Enter the subject for assigning grades: ";
-				string chosenSubject;
-				cin >> chosenSubject;
-				int subjectIndex = -1;
-				for (int j = 0; j < 5; ++j) {
-					if (subjects[j] == chosenSubject) {
-						subjectIndex = j;
-						break;
-					}
-				}
-				if (subjectIndex == -1) {
-					cout << "Invalid subject.\n";
-					return;
-				}
-				cout << "Enter grades for the subject \"" << chosenSubject << "\" for class " << Class << ":\n";
+				cout << "Enter the marks for mid-term exam and final exam for each subject:\n";
 				for (int k = 0; k < count; ++k) {
-					if (student[k].getClass() == Class) {
-						cout << "Enter grade for student " << student[k].getname() << ": ";
-						char grade;
-						cin >> grade;
-						grade = toupper(grade);
-						cout << "Grade for student " << student[k].getname() << " in " << chosenSubject << ": " << grade << endl;
-						gradesFile << student[k].getid() << "," << student[k].getname() << ",  " << Class << "," << chosenSubject << "," << grade << endl;
+					if (to_string(student[k].getClass()) == Class) {
+						cout << "Enter marks for student " << student[k].getname() << ":\n";
+						string midTermStudentGrades;
+						string finalStudentGrades;
+						for (int j = 0; j < 5; ++j) {
+							string chosenSubject = subjects[j];
+							cout << "Subject: " << chosenSubject << endl;
+							cout << "Enter mid-term exam marks:(Integer number only) ";
+							
+							int midTermMarks;
+						    x:
+							cin >> midTermMarks;
+							if (midTermMarks > 100 || midTermMarks < 0) {
+								cout << "enter the valid marks out of 100 (Integer number only)\n";
+									goto x;
+							}
+							cout << "Enter final exam marks:(Integer number only) ";
+							
+							int finalExamMarks;
+							y:
+							cin >> finalExamMarks;
+							if (finalExamMarks > 100 || finalExamMarks < 0) {
+								cout << "enter the valid marks out of 100\n";
+								goto y;
+							}
+							int totalMidTermMarks = midTermMarks;
+							int totalFinalExamMarks = finalExamMarks;
+							string midTermGrade;
+							string finalGrade;
+							
+							 if (totalMidTermMarks >= 90) {
+								midTermGrade = "A";
+							}
+							else if (totalMidTermMarks >= 80 && totalMidTermMarks <= 89) {
+								midTermGrade = "B";
+							}
+							else if (totalMidTermMarks >= 70 && totalMidTermMarks <= 79) {
+								midTermGrade = "C";
+							}
+							else if (totalMidTermMarks >= 60 && totalMidTermMarks <= 69) {
+								midTermGrade = "D";
+							}
+							else {
+								midTermGrade = "F";
+							}
+
+							 if (totalFinalExamMarks >= 90) {
+								finalGrade = "A";
+							}
+							else if (totalFinalExamMarks >= 80 && totalFinalExamMarks <= 89) {
+								finalGrade = "B";
+							}
+							else if (totalFinalExamMarks >= 70 && totalFinalExamMarks <= 89) {
+								finalGrade = "C";
+							}
+							else if (totalFinalExamMarks >= 60 && totalFinalExamMarks <= 89) {
+								finalGrade = "D";
+							}
+							else {
+								finalGrade = "F";
+							}
+							midTermStudentGrades.empty();
+							finalStudentGrades.empty();
+							cout << "Grade for student " << student[k].getname() << " in " << chosenSubject << " mid-term exam: " << midTermGrade << endl;
+							cout << "Grade for student " << student[k].getname() << " in " << chosenSubject << " final exam: " << finalGrade << endl;
+							midTermStudentGrades +=  to_string(student[k].getClass()) + "," + chosenSubject + "," + midTermGrade + "," + to_string(student[k].getid()) + "\n";
+							finalStudentGrades += to_string(student[k].getClass()) + "," + chosenSubject + "," + finalGrade + "," + to_string(student[k].getid()) + "\n";
+
+							//	system("cls");
+						}
+						MgradesFile   << midTermStudentGrades << endl;
+						FgradesFile  << finalStudentGrades << endl;
+						midTermGrades[k] = midTermStudentGrades;
+						finalGrades[k] = finalStudentGrades;
+						system("cls");
 
 					}
+
 				}
 				return;
 			}
 		}
 		if (!classFound) {
 			cout << "Class not found.\n";
+			goto l;
+		}
+		
+		system("cls");
+	}
+
+
+
+
+
+	void displayGrades() {
+		int choice;
+	l:
+		cout << "Enter the choice (1 for Midterm, 2 for Final): ";
+		cin >> choice;
+
+		// Input validation
+		if (choice != 1 && choice != 2) {
+			cout << "Invalid choice. Please enter 1 for Midterm or 2 for Final." << endl;
+			goto l;
+		}
+
+		bool idEntered = false;
+		string id;
+		string Class;
+		for (int i = 0; i < count; i++) {
+			if (choice == 1) {
+				if (!idEntered) { 
+					
+					cout << "Enter the class of student: ";
+					cin >> Class;
+					cout << "Enter the ID of the student: ";
+					cin >> id;
+					cout << "Class,subject,grade,id\n";
+					cin.ignore();
+					idEntered = true; 
+				}
+
+				ifstream midtermFile("midtermgrades.txt");
+				string midgrade;
+				bool found = false;
+				while (getline(midtermFile, midgrade)) {
+					
+					int pos1 = midgrade.find(",");
+					int pos2 = midgrade.find(",", pos1 + 1);
+					int pos3 = midgrade.find(",", pos2 + 1);
+
+					string lineClass = midgrade.substr(0, pos1);
+					string subject = midgrade.substr(pos1 + 1, pos2 - pos1 - 1);
+					string grade = midgrade.substr(pos2 + 1, pos3 - pos2 - 1);
+					string lineId = midgrade.substr(pos3 + 1);
+
+					if (lineClass == Class && lineId == id) {
+						cout << midgrade<<endl;
+						found = true;
+					}
+				}
+
+				if (!found) {
+					cout << "Student ID not found in mid grades or teacher has not marked the grade." << endl;
+				}
+				midtermFile.close();
+				if (!found) {
+					cout << "Student ID not found in midterm grades." << endl;
+				}
+				break;
+			}
+			else if (choice == 2) {
+				if (!idEntered) { 
+					cout << "Enter the class of student: ";
+					cin >> Class;
+					cout << "Enter the ID of the student: ";
+					cin >> id;
+					cout << "Class,subject,grade,id\n";
+					cin.ignore();
+					idEntered = true;
+				}
+
+				ifstream finalFile("finalgrades.txt");
+				string finalgrade;
+				bool found = false;
+				while(getline(finalFile, finalgrade)) {
+
+					int pos1 = finalgrade.find(",");
+					int pos2 = finalgrade.find(",", pos1 + 1);
+					int pos3 = finalgrade.find(",", pos2 + 1);
+
+					string lineClass = finalgrade.substr(0, pos1);
+					string subject = finalgrade.substr(pos1 + 1, pos2 - pos1 - 1);
+					string grade = finalgrade.substr(pos2 + 1, pos3 - pos2 - 1);
+					string lineId = finalgrade.substr(pos3 + 1);
+
+					if (lineClass == Class && lineId == id) {
+					
+						cout <<  finalgrade << endl;
+						found = true;
+					}
+				}
+				finalFile.close();
+				if (!found) {
+					cout << "Student ID not found in final grades or teacher has not marked the grade." << endl;
+				}
+				break; 
+			}
+			cout << endl;
 		}
 	}
-};
-class attendence : public teachers, public Exam {
+	~grades() {
+		delete[] student;
+		student = nullptr;
+	}
+	};
+
+
+class teacher_functionalities : public teachers, public Exam {
 	string student_attendence;
 	Student* student;
 	int count;
 	ofstream file;
 public:
-	attendence(Student* student, int count) {
+	teacher_functionalities(Student* student, int count) {
 		this->student = student;
 		this->count = count;
 	}
@@ -660,8 +839,7 @@ int NoofStudents()
 	return count;
 }
 
-//Finding how many unique classes are there in a school
-//  and how many students are in each class
+//Finding how many unique classes are there in a school and how many students are in each class
 void UniqueClasses(Student* students, int count, int*& MaxClass, int*& Classes, int& size)
 {
 	size = 0;
@@ -713,14 +891,14 @@ void Display(Student* students, int count)
 			{
 				if (Classes[i] == students[j].getClass())
 				{
-
-					cout << "ID: " << students[j].getid() << endl;
-					cout << "Class : " << students[j].getClass() << endl;
-					cout << "Name: " << students[j].getname() << endl;
-					cout << "Father Name: " << students[j].getfathername() << endl;
-					cout << "Fee: " << students[j].getfee() << endl;
-					cout << "Pending Balance : " << students[j].getPendingBalance() << endl;
-					cout << endl;
+					cout << students[j] << endl;
+					//cout << "ID: " << students[j].getid() << endl;
+					//cout << "Class : " << students[j].getClass() << endl;
+					//cout << "Name: " << students[j].getname() << endl;
+					//cout << "Father Name: " << students[j].getfathername() << endl;
+					//cout << "Fee: " << students[j].getfee() << endl;
+					//cout << "Pending Balance : " << students[j].getPendingBalance() << endl;
+					//cout << endl;
 				}
 			}
 		}
@@ -733,13 +911,14 @@ void Display(Student* students, int count)
 		{
 			if (innerchoice == students[i].getClass())
 			{
-				cout << "ID: " << students[i].getid() << endl;
-				cout << "Class : " << students[i].getClass() << endl;
-				cout << "Name: " << students[i].getname() << endl;
-				cout << "Father Name: " << students[i].getfathername() << endl;
-				cout << "Fee: " << students[i].getfee() << endl;
-				cout << "Pending Balance : " << students[i].getPendingBalance() << endl;
-				cout << endl;
+				cout << students[i] << endl;
+				//cout << "ID: " << students[i].getid() << endl;
+				//cout << "Class : " << students[i].getClass() << endl;
+				//cout << "Name: " << students[i].getname() << endl;
+				//cout << "Father Name: " << students[i].getfathername() << endl;
+				//cout << "Fee: " << students[i].getfee() << endl;
+				//cout << "Pending Balance : " << students[i].getPendingBalance() << endl;
+				//cout << endl;
 			}
 		}
 	}
@@ -793,6 +972,7 @@ void SearchFamily(Student* students, int count)
 			cout << endl << endl;
 			cout << "ID: " << students[i].getid() << endl;
 			cout << "Name: " << students[i].getname() << endl;
+			cout << "Father Name:" << students[i].getfathername() << endl;
 			cout << "Class : " << students[i].getClass() << endl;
 			cout << "Monthly Fee: " << students[i].getfee() << endl;
 			cout << "Pending Balance: " << students[i].getPendingBalance() << endl;
@@ -1028,93 +1208,210 @@ void UpdatingData(Student* students, int count)
 
 	for (int i = 0; i < count; i++)
 	{
-		output << students[i].getid() << " "
-			<< students[i].getfee() << " " << students[i].getPendingBalance() << " " << students[i].getClass() << students[i].getname() << "#" << students[i].getfathername() << endl;
+		output << students[i].getid() << " " << students[i].getfee() << " " << students[i].getPendingBalance() << " " << students[i].getClass() << students[i].getname() << "#" << students[i].getfathername() << endl;
 	}
 	output.close();
 }
 
-void EditInfo();
+void Search(Student* students, int count, int& index)
+{
+	system("cls");
+	int check;
+	cout << "Enter the ID of the Student You Want to Search: ";
+	int id;
+	bool found = true;
+	cin >> id;
+	for (int i = 0; i < count; i++)
+	{
+		if (id == students[i].getid())
+		{
+			index = i;
+			found = false;
+			system("cls");
+			cout << students[i] << endl;
+			//cout << "ID: " << students[i].getid() << endl;
+			//cout << "Name: " << students[i].getname() << endl;
+			//cout << "Class : " << students[i].getClass() << endl;
+			//cout << "Monthly Fee: " << students[i].getfee() << endl;
+			//cout << "Pending Balance: " << students[i].getPendingBalance() << endl;
 
-void DefaulterList();
+		}
+	}
+	if (found)
+	{
+		cout << "Student With Id " << id << " Not Found" << endl;
+	}
+	cout << "Press Any Key to Continue\n";
+	_getch();
+}
+
+void SearchFamily(Student* students, int count, int& index)
+{
+	system("cls");
+	bool found = true;
+	cout << "Enter the Father Name\n" << endl;
+	string tempFatherName;
+	cin.ignore();
+	getline(cin, tempFatherName, '\n');
+	for (int i = 0; i < count; i++)
+	{
+		if (toLower(tempFatherName) == toLower(students[i].getfathername()))
+		{
+			index = i;
+			found = false;
+			cout << students[i] << endl;
+			//cout << endl << endl;
+			//cout << "ID: " << students[i].getid() << endl;
+			//cout << "Name: " << students[i].getname() << endl;
+			//cout << "Class : " << students[i].getClass() << endl;
+			//cout << "Monthly Fee: " << students[i].getfee() << endl;
+			//cout << "Pending Balance: " << students[i].getPendingBalance() << endl;
+		}
+	}
+	if (found)
+	{
+		cout << "\nStudent With Father Name " << tempFatherName << " Not Found\n";
+	}
+	cout << "\nPress Any Key to Continue\n";
+	_getch();
+}
 
 
+void EditInfo(Student* students, int count)
+{
+	int temp, index = -1, update;
+	string Update;
+	system("cls");
+	cout << "1. To Search by ID number\n";
+	cout << "2. To Search by Father Name\n";
+	cin >> temp;
+	if (temp == 1)
+	{
+		Search(students, count, index);
+	}
+	else if (temp == 2)
+	{
+		SearchFamily(students, count, index);
+	}
+	if (index != -1)
+	{
+		cout << "\n\n";
+		cout << "1. To update Id Number\n";
+		cout << "2. To Update Name\n";
+		cout << "3. To Update Father Name\n4. To Update Class\n5. To Update Fee\n6. To Update Pending Balance\n7. To Update Every Thing\n";
+		cin >> temp;
+		system("cls");
+		if (temp == 1)
+		{
+		unique:
+			cout << "Enter the New Id Number\n";
+			cin >> update;
+			if (uniqueIdNumber(students, count, update))
+			{
+				students[index].setid(update);
+			}
+			else
+			{
+				cout << "\nWarning : Enter a unique Id Number\n";
+				goto unique;
+			}
 
-
-//class attendence : public teachers, public Exam {
-//	string student_attendence;
-//	Student* student;
-//	int count;
-//	ofstream file;
-//public:
-//	attendence(Student* student, int count) {
-//		this->student = student;
-//		this->count = count;
-//	}
-//	void attendence_mark() {
-//		ofstream file("attendence.csv");
-//		int enter;
-//		cout << "Do you want to login as a teacher? \n If yes press 1 else press 0\n";
-//		cin >> enter;
-//		if (enter == 1) {
-//			cout << "Enter your id\n";
-//			cin >> enter;
-//			if (str_teacher_ids.find(enter))
-//			{
-//				system("CLS");
-//				cout << "You have entered as the teacher of " << enter << " class\n";
-//				int option(0);
-//				string mark;
-//				while (option != -1) {
-//					cout << "Press 1 if you want to mark attendence\n";
-//					cout << "Press 2 if you want to see previous attendences\n";
-//					cout << "Press 3 if you want to see particular student attendence\n";
-//					cout << "Press 4 to conduct exam\n";
-//					cout << "press 5 to assign  grades\n";
-//					cout << "Press -1 to exit\n";
-//					cin >> option;
-//					if (option == 1) {
-//						file << "class,id,name,attendence\n";
-//		for (int i = 0; i < count; i++)
-//			if (enter == student[i].getClass()) {
-//				cout << "Press p to mark presence or a to mark absence of student\n";
-//				cout << "ID of the student " << student[i].getid() << endl;
-//				cout << "Name of the student " << student[i].getname() << endl;
-//				cin >> mark;
-//				mark = to_string(student[i].getClass()) + ',' + to_string(student[i].getid()) +
-//					',' + student[i].getname() + ',' + mark + "\n";
-//				file << mark;
-//				student_attendence += mark;
-//				mark.empty();
-//				cout << student_attendence << endl;
-//			}
-//
-//	}
-//					else if (option == 2) {
-//		cout << "class id name attendence\n";
-//		for (option = 0; option < student_attendence.length(); option++)
-//			if (student_attendence[option] == '\n') cout << endl;
-//			else if (student_attendence[option] == ',') cout << " ";
-//			else cout << student_attendence[option];
-//		cout << endl;
-//	}
-//	else if (option == 3) {
-//		cout << "Enter id of particular student\n";
-//		cin >> mark;
-//		size_t record = student_attendence.find(mark);
-//		size_t end_record = student_attendence.find('\n', record);
-//		mark.empty();
-//		mark = student_attendence.substr(record, end_record - record);
-//		cout << mark << endl;
-//	}
-//	else if (option == 4) {
-//		Exam exam(student, count);
-//		exam.conductExam();
-//	}
-//				}
-//			}
-//		}
-//		file.close();
-//	}
-//
-//};
+		}
+		else if (temp == 4)
+		{
+			cout << "Enter the New Class\n";
+			cin >> update;
+			students[index].setclass(update);
+		}
+		else if (temp == 5)
+		{
+			cout << "Enter the New Fee\n";
+			cin >> update;
+			students[index].setfee(update);
+		}
+		else if (temp == 6)
+		{
+			cout << "Enter the New Pending Balance\n";
+			cin >> update;
+			students[index].setpendingBalance(update);
+		}
+		else if (temp == 2)
+		{
+			cout << "Enter the New Name\n";
+			cin.ignore();
+			getline(cin, Update, '\n');
+			students[index].setname(Update);
+		}
+		else if (temp == 3)
+		{
+			cout << "Enter the New Father Name\n";
+			cin.ignore();
+			getline(cin, Update, '\n');
+			students[index].setfathername(Update);
+		}
+		else if (temp == 7)
+		{
+		sorry:
+			cout << "Enter the New Id Number\n";
+			cin >> update;
+			if (uniqueIdNumber(students, count, update))
+			{
+				students[index].setid(update);
+			}
+			else
+			{
+				cout << "\nWarning : Enter A unique Id Number\n";
+				goto sorry;
+			}
+			cout << "Enter the New Class\n";
+			cin >> update;
+			students[index].setclass(update);
+			cout << "Enter the New Fee\n";
+			cin >> update;
+			students[index].setfee(update);
+			cout << "Enter the New Pending Balance\n";
+			cin >> update;
+			students[index].setpendingBalance(update);
+			cout << "Enter the New Name\n";
+			cin.ignore();
+			getline(cin, Update, '\n');
+			students[index].setname(Update);
+			cout << "Enter the New Father Name\n";
+			cin.ignore();
+			getline(cin, Update, '\n');
+			students[index].setfathername(Update);
+		}
+		cout << "\nUpdated\n";
+		cout << "Press Any KeY TO Continue\n";
+		_getch();
+	}
+}
+void DefaulterList(Student* students, int count)
+{
+	int amount;
+	string File_Name;
+	system("cls");
+	cout << "Enter the Base Amount\n";
+	cin >> amount;
+	cout << "Enter the Name of .txt File in which You want to Store Data\n";
+	cin.ignore();
+	getline(cin, File_Name, '\n');
+	ofstream output(File_Name);
+	for (int i = 0; i < count; i++)
+	{
+		if (students[i].getPendingBalance() >= amount)
+		{
+			output << students[i].getid() << endl;
+			output << students[i].getname() << endl;
+			output << students[i].getfathername() << endl;
+			output << students[i].getClass() << endl;
+			output << students[i].getPendingBalance() << endl;
+			output << endl << endl;
+		}
+	}
+	system("cls");
+	output.close();
+	cout << "List made Successfully\n";
+	cout << "Press Any Key to Continue\n";
+	_getch();
+}
