@@ -1,12 +1,11 @@
-1001 1500 0 10Shaheer#Ghulam Hussain
-1002 2000 0 10Huzaifa#Murab Ali
-1003 1700 1700 10Daniyal#Tahir Nawaz
-1004 1600 1500 9Ali Jafar#Tahir Nawaz
-1005 2000 0 9Abdul Ghani#Ghani Firdos
-1006 1500 0 9Hassan Abaid#Usman Khan
-1007 2000 1000 5Yaseen#Wazeer Khan
-1008 1500 3000 5Afnan#Tahir Nawaz
-1009 1650 0 6Taha#Asif Nawaz
-1011 2000 1000 5Muaaz Kamboh#Shahid Nawaz
-1012 1400 0 2Ahmed#Tahir Nawaz
-1013 1750 50 2Trevis Head#Head Singh
+1002 2000 -200 10Huzaifa#Murab Ali#2200
+1003 1700 100 10Daniyal#Tahir Nawaz#1600
+1004 1600 -1800 9Ali Jafar#Tahir Nawaz#3400
+1005 2000 1000 9Abdul Ghani#Ghani Firdos#1000
+1006 1500 0 9Hassan Abaid#Hidayat Khan#0
+1007 2000 1000 5Yaseen#Wazeer Khan#0
+1008 1500 3000 5Afnan#Tahir Nawaz#0
+1009 1650 0 6Taha#Asif Nawaz#0
+1011 2000 1000 5Muaaz Kamboh#Shahid Nawaz#0
+1012 1400 0 2Ahmed#Tahir Nawaz#0
+1013 1750 50 2Trevis Head#Head Singh#0

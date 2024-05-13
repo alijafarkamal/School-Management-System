@@ -1,5 +1,5 @@
 
-#include<iostream>
+#include <iostream>
 #include<fstream>
 #include<algorithm>
 #include<sstream>
@@ -8,9 +8,7 @@
 #include<cctype>
 #include<conio.h>
 #include<iomanip>
-#include"functions.h"
-#include"sqlite/sqlite3.h"
-#include"functions.h"
+#include "functions.h"
 using namespace std;
 class other_staff {
 protected:
@@ -61,7 +59,7 @@ public:
 		int choice;
 		string mark("");
 		string str_add;
-		id_setter:
+	id_setter:
 		cout << "Enter his id \n";
 		cin >> str_add;
 		choice = other_staff_id.find(str_add);
@@ -87,92 +85,92 @@ public:
 		file << mark;
 		file.close();
 	}
-	void remove() {	
+	void remove() {
 		int choice;
-			string str_remove;
-			ID_remover:
-			cout << "Enter his id\n";
-			cin >> str_remove;
-			cout << other_staff_id;
-			choice = other_staff_id.find(str_remove);
-			if (choice == string::npos) {
-				cout << "ID not found\n";
-				goto ID_remover;
+		string str_remove;
+	ID_remover:
+		cout << "Enter his id\n";
+		cin >> str_remove;
+		cout << other_staff_id;
+		choice = other_staff_id.find(str_remove);
+		if (choice == string::npos) {
+			cout << "ID not found\n";
+			goto ID_remover;
+		}
+		int comma_counter = count(other_staff_id.begin(), other_staff_id.begin() + choice, ' ');
+		cout << comma_counter << endl;
+		string data_store; int counter(0);
+		ifstream file(file_other_staff);
+		string data_store_temp;
+		while (getline(file, data_store)) {
+			if (counter != comma_counter + 1) {
+				data_store_temp += data_store + "\n";// << endl;
 			}
-			int comma_counter = count(other_staff_id.begin(), other_staff_id.begin() + choice, ' ');
-			cout << comma_counter << endl; 
-			string data_store; int counter(0);
-			ifstream file(file_other_staff);
-			string data_store_temp;
-			while (getline(file, data_store)) {		
-				if (counter != comma_counter+1) {
-					data_store_temp += data_store + "\n";// << endl;
-				}
-				counter++;
-				data_store.empty();
-			}
-			ofstream file_out(file_other_staff);
-			cout << data_store_temp;
-			file_out << data_store_temp;
-			file_out.close();
-			other_staff_number--;
-			other_staff_id.erase();
-			other_staff_name.erase();
-			other_staff_salary.erase();
-			other_staff_profession.erase();
-			initializer();
-			cout << other_staff_id << endl;
-			cout << other_staff_name << endl;
-			cout << other_staff_salary << endl;
-			cout << other_staff_profession << endl;
-		}		
-	
+			counter++;
+			data_store.empty();
+		}
+		ofstream file_out(file_other_staff);
+		cout << data_store_temp;
+		file_out << data_store_temp;
+		file_out.close();
+		other_staff_number--;
+		other_staff_id.erase();
+		other_staff_name.erase();
+		other_staff_salary.erase();
+		other_staff_profession.erase();
+		initializer();
+		cout << other_staff_id << endl;
+		cout << other_staff_name << endl;
+		cout << other_staff_salary << endl;
+		cout << other_staff_profession << endl;
+	}
+
 	void update() {
 		int reply;
-			string mark;
-			string str_add;
-		id_updater:
-			cout << "Enter his id \n";
-			cin >> str_add;
-			reply = other_staff_id.find(str_add);
-			if (reply == string::npos) {
-				cout << "id not found\n";
-				goto id_updater;
+		string mark;
+		string str_add;
+	id_updater:
+		cout << "Enter his id \n";
+		cin >> str_add;
+		reply = other_staff_id.find(str_add);
+		if (reply == string::npos) {
+			cout << "id not found\n";
+			goto id_updater;
+		}
+		cout << "Enter his updated id\n";
+		cin >> str_add;
+		mark += str_add + ',';
+		other_staff_id += " " + str_add;
+		cout << "Enter his updated name \n";
+		cin >> str_add;
+		mark += str_add + ',';
+		other_staff_name += " " + str_add;
+		cout << "Enter his updated salary\n";
+		cin >> str_add;
+		mark += str_add + ',';
+		other_staff_salary += " " + str_add;
+		cout << "Enter his updated Profession\n";
+		cin >> str_add;
+		mark += str_add + '\n';
+		other_staff_profession += " " + str_add;
+		string data_store;
+		ifstream file(file_other_staff);
+		int comma_counter = count(other_staff_id.begin(), other_staff_id.begin() + reply, ' ');
+		int counter(0);
+		string data_store_temp;
+		while (getline(file, data_store)) {
+			if (counter != comma_counter + 1) {
+				data_store_temp += data_store + "\n";
 			}
-			cout << "Enter his updated id\n";
-			cin >> str_add;
-			mark += str_add + ',';
-			other_staff_id += " " + str_add;
-			cout << "Enter his updated name \n";
-			cin >> str_add;
-			mark += str_add + ',';
-			other_staff_name += " " + str_add;
-			cout << "Enter his updated salary\n";
-			cin >> str_add;
-			mark += str_add + ',';
-			other_staff_salary += " " + str_add;
-			cout << "Enter his updated Profession\n";
-			cin >> str_add;
-			mark += str_add + '\n';
-			other_staff_profession += " " + str_add;
-			string data_store;
-			ifstream file(file_other_staff);
-			int comma_counter = count(other_staff_id.begin(), other_staff_id.begin() + reply, ' ');
-			int counter(0);
-			string data_store_temp;
-			while (getline(file, data_store)) {
-				if (counter != comma_counter+1) {
-					data_store_temp += data_store + "\n";
-				}
-				else {
-					data_store_temp += mark;
-				}
-				data_store.empty();
-				counter++;
+			else {
+				data_store_temp += mark;
 			}
-			ofstream file_out(file_other_staff);
-			file_out << data_store_temp;
-			file_out.close();	
+			data_store.empty();
+			counter++;
+		}
+		ofstream file_out(file_other_staff);
+		file_out << data_store_temp;
+		file_out.close();
 	}
 	void display() {
 		ifstream file(file_other_staff);
@@ -186,16 +184,17 @@ int main()
 {
 	int count = NoofStudents();
 	Student* students = new Student[count];
+	Alumni alumni;
 	ifstream input("student.txt");
 	string name, password, fathername;
-	teachers_management teacher;
+	/*teachers_management teacher;*/
 	//teacher.update();
 	other_staff_management other;
 	//other.update();
-	teacher_functionalities teacher_func(students, count);
-	//teacher_func.attendence_mark();
+	//attendence attend(students, count);
+	//attend.attendence_mark();
 	int id, fee, invalidTry = 3, choice = 0, PendingBalance, Class, InnerChoice;
-
+	int monthlyFeePaid = 0;
 	if (input.is_open())
 	{
 		for (int i = 0; i < count; i++)
@@ -204,9 +203,10 @@ int main()
 
 
 			getline(input, name, '#');
-			getline(input, fathername, '\n');
+			getline(input, fathername, '#');
+			input >> monthlyFeePaid;
 
-			students[i] = Student(name, fathername, id, fee, PendingBalance, Class);
+			students[i] = Student(name, fathername, id, fee, PendingBalance, Class, monthlyFeePaid);
 
 		}
 		input.close();
@@ -249,7 +249,10 @@ invalid:
 			cout << "9. To enter as a teacher\n";
 			cout << "10. To manage staff\n";
 			cout << "11. To manage teachers\n";
-			cout << "Press -1 to exit \n";
+			cout << "12. To Enter Monthly Fee Payment\n";
+			cout << "13. To Enter Alumni Mode\n";
+			cout << "14. To Generate Monthly Report\n";
+			cout << "Press -1 to exit\n";
 			cin >> choice;
 			if (choice == 1)
 			{
@@ -299,7 +302,8 @@ invalid:
 				DefaulterList(students, count);
 			}
 			else if (choice == 9) {
-				teacher_func.attendence_mark();
+				/*attend.attendence_mark();*/
+				alumni.updateData();
 			}
 			else if (choice == 10) {
 				cout << "Press 1 to add other staff \n";
@@ -314,7 +318,7 @@ invalid:
 				else if (choice == 4) other.display();
 			}
 			else if (choice == 11) {
-				cout << "Press 1 to add teacher\n";
+				/*cout << "Press 1 to add teacher\n";
 				cout << "Press 2 to update teacher\n";
 				cout << "Press 3 to remove teacher\n";
 				cout << "Press 4 to display teacher\n";
@@ -323,7 +327,43 @@ invalid:
 				if (choice == 1) teacher.add();
 				else if (choice == 2) teacher.update();
 				else if (choice == 3) teacher.remove();
-				else if (choice == 4) teacher.display();
+				else if (choice == 4) teacher.display();*/
+			}
+			else if (choice == 12)
+			{
+				addMonthlyFee(students, count);
+			}
+			else if (choice == 13)
+			{
+				system("cls");
+				cout << "Enter: \n1. To Display All Alumni\n2. To Search An Alumni\n";
+				cout << "Enter Your Choice: ";
+				cin >> InnerChoice;
+				if (InnerChoice == 1)
+				{
+					alumni.display();
+				}
+				else
+				{
+					cout << "Enter Alumni's ID: ";
+					string alumniID;
+				rep:
+					cin >> alumniID;
+					if (alumni.display(alumniID))
+					{
+						cout << "\nPress Any Key to Continue\n";
+						_getch();
+					}
+					else
+					{
+						cout << "Enter Again: ";
+						goto rep;
+					}
+				}
+			}
+			else if (choice == 14)
+			{
+				monthlyReport(students, count);
 			}
 		}
 	}

@@ -1,0 +1,5 @@
+math
+urdu
+isl
+science
+eng

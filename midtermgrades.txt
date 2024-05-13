@@ -11,3 +11,8 @@ eng,A,1008
 isl,A,1008
 science,A,1008
 
+Class10,math,A,1001
+urdu,A,1001
+eng,A,1001
+isl,A,1001
+science,A,1001
