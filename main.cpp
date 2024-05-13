@@ -1,13 +1,4 @@
-
-#include <iostream>
-#include<fstream>
-#include<algorithm>
-#include<sstream>
-#include<string>
-#include<cstring>
-#include<cctype>
-#include<conio.h>
-#include<iomanip>
+﻿
 #include "functions.h"
 using namespace std;
 class other_staff {
@@ -182,17 +173,17 @@ public:
 };
 int main()
 {
+
+
+
 	int count = NoofStudents();
 	Student* students = new Student[count];
 	Alumni alumni;
 	ifstream input("student.txt");
 	string name, password, fathername;
-	/*teachers_management teacher;*/
-	//teacher.update();
+	teachers_management teacher;
 	other_staff_management other;
-	//other.update();
-	//attendence attend(students, count);
-	//attend.attendence_mark();
+	teacher_functionalities teacher_func(students, count);
 	int id, fee, invalidTry = 3, choice = 0, PendingBalance, Class, InnerChoice;
 	int monthlyFeePaid = 0;
 	if (input.is_open())
@@ -219,6 +210,8 @@ int main()
 invalid:
 	if (invalidTry > 0)
 	{
+		//setCursorPosition(10, 10);
+		//setColor(12);
 		cout << "Enter the Password To Continue\n";
 		getline(cin, password);
 		if (password != "hello")
@@ -232,28 +225,62 @@ invalid:
 		else
 		{
 			system("cls");
+			setColor(10);
 			cout << "You Successfully Entered as ADMIN\n";
 		}
+
 		while (choice != -1)
 		{
+			setCursorPosition(10, 10);
+			setColor(15);
 			system("cls");
-			cout << "WELCOME TO MAIN MENU\n";
-			cout << "1. To Display Student Records\n";
-			cout << "2. To Display Details Of a Particular Student\n";
-			cout << "3. To Give and OverView\n";
-			cout << "4. To Enter Financial Mode\n";
-			cout << "5. To Enter A New Student\n";
-			cout << "6. To Remove a Student\n";
-			cout << "7. To Edit Student Details\n";
-			cout << "8. To Make A Defaulter List\n";
-			cout << "9. To enter as a teacher\n";
-			cout << "10. To manage staff\n";
-			cout << "11. To manage teachers\n";
+			cout << R"(
+ _    _      _                            _         ___  ___      _        ___  ___                 
+| |  | |    | |                          | |        |  \/  |     (_)       |  \/  |                 
+| |  | | ___| | ___ ___  _ __ ___   ___  | |_ ___   | .  . | __ _ _ _ __   | .  . | ___ _ __  _   _ 
+| |/\| |/ _ | |/ __/ _ \| '_ ` _ \ / _ \ | __/ _ \  | |\/| |/ _` | | '_ \  | |\/| |/ _ | '_ \| | | |
+\  /\  |  __| | (_| (_) | | | | | |  __/ | || (_) | | |  | | (_| | | | | | | |  | |  __| | | | |_| |
+ \/  \/ \___|_|\___\___/|_| |_| |_|\___|  \__\___/  \_|  |_/\__,_|_|_| |_| \_|  |_/\___|_| |_|\__,_|
+)" << '\n';
+			//setColor(11);
+			//cout << "\t\t\tWELCOME TO MAIN MENU\n";
+			setColor(12);
+			cout << string(100, '-') << endl;
+			setColor(15);
+			cout << "1.  To Display Student Records\n";
+		//	cout << string(80, '-') << endl;
+			cout << "2.  To Display Details Of a Particular Student\n";
+			//cout << string(80, '-') << endl;
+			cout << "3.  To Give and OverView\n";
+		//	cout << string(80, '-') << endl;
+			cout << "4.  To Enter Financial Mode\n";
+		//	cout << string(80, '-') << endl;
+			cout << "5.  To Enter A New Student\n";
+		//	cout << string(80, '-') << endl;
+			cout << "6.  To Remove a Student\n";
+		//	cout << string(80, '-') << endl;
+			cout << "7.  To Edit Student Details\n";
+		//	cout << string(80, '-') << endl;
+			cout << "8.  To Make A Defaulter List\n";
+		//	cout << string(80, '-') << endl;
+			cout << "9.  To Enter as a teacher\n";
+		//	cout << string(80, '-') << endl;
+			cout << "10. To Manage non-teaching staff\n";
+		//	cout << string(80, '-') << endl;
+			cout << "11. To Manage teachers\n";
+		//	cout << string(80, '-') << endl;
 			cout << "12. To Enter Monthly Fee Payment\n";
+			//cout << string(100, '-') << endl;
 			cout << "13. To Enter Alumni Mode\n";
+			//cout << string(80, '-') << endl;
 			cout << "14. To Generate Monthly Report\n";
+			//cout << string(80, '-') << endl;
+			setColor(12);
 			cout << "Press -1 to exit\n";
+			cout << string(100, '-') << endl;
+			setColor(15);
 			cin >> choice;
+			
 			if (choice == 1)
 			{
 				Display(students, count);
@@ -302,14 +329,14 @@ invalid:
 				DefaulterList(students, count);
 			}
 			else if (choice == 9) {
-				/*attend.attendence_mark();*/
-				alumni.updateData();
+				teacher_func.functionalities();
 			}
 			else if (choice == 10) {
-				cout << "Press 1 to add other staff \n";
-				cout << "Press 2 to update other staff \n";
-				cout << "Press 3 to remove other staff \n";
-				cout << "Press 4 to display other staff \n";
+				cout << string(100, '-') << endl;
+				cout << "Press 1 to add non-teaching staff \n";
+				cout << "Press 2 to update non-teaching staff \n";
+				cout << "Press 3 to remove non-teaching staff \n";
+				cout << "Press 4 to display non-teaching staff \n";
 				cout << "Press 5 to exit\n";
 				cin >> choice;
 				if (choice == 1) other.add();
@@ -318,7 +345,8 @@ invalid:
 				else if (choice == 4) other.display();
 			}
 			else if (choice == 11) {
-				/*cout << "Press 1 to add teacher\n";
+				cout << string(100, '-') << endl;
+				cout << "Press 1 to add teacher\n";
 				cout << "Press 2 to update teacher\n";
 				cout << "Press 3 to remove teacher\n";
 				cout << "Press 4 to display teacher\n";
@@ -327,7 +355,7 @@ invalid:
 				if (choice == 1) teacher.add();
 				else if (choice == 2) teacher.update();
 				else if (choice == 3) teacher.remove();
-				else if (choice == 4) teacher.display();*/
+				else if (choice == 4) teacher.display();
 			}
 			else if (choice == 12)
 			{
@@ -361,7 +389,10 @@ invalid:
 					}
 				}
 			}
-			else if (choice == 14)
+			else if (choice == 14) {
+				alumni.updateData();
+			}
+			else if (choice == 15)
 			{
 				monthlyReport(students, count);
 			}
@@ -369,10 +400,14 @@ invalid:
 	}
 	else
 	{
+		setColor(12); // Red
+		cout << "Crashed !\n";
+		return 0;
 		cout << "Crashed !\n";
 		return 0;
 	}
 	delete[] students;
+	cout << string(100, '-') << endl;
 	system("pause");
 	return 0;
 }

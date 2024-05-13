@@ -5,16 +5,30 @@
 #include<string>
 #include<cstring>
 #include<iomanip>
+#include <windows.h>
+#include<conio.h>
 #include <vector>
 #include"sqlite/sqlite3.h"
 using namespace std;
 const string attend = "attendence.csv";
 const string file_other_staff = "other_staff.csv";
 const string file_teachers = "teachers.csv";
+
+// Function to set the cursor position in the console
+void setCursorPosition(int x, int y) {
+	COORD coord;
+	coord.X = x;
+	coord.Y = y;
+	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
+}
+
+// Function to set text color
+void setColor(int color) {
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color);
+}
 class Student
 {
 private:
-
 	string name;
 	string FatherName;
 	int id;
@@ -191,7 +205,6 @@ public:
 				sqlite3_free(err);
 			}
 		}
-
 		sqlite3_close(db);
 	}
 
@@ -241,8 +254,6 @@ public:
 		sqlite3_close(db);
 	}
 };
-
-
 int teachers::no_of_teachers = 11;
 class teachers_management : public teachers {
 public:
@@ -387,6 +398,7 @@ public:
 	void display() {
 		ifstream file(file_teachers);
 		string display_mode;
+		cout << string(100, '-') << endl;
 		while (getline(file, display_mode)) {
 		}
 		cout << display_mode;
@@ -423,6 +435,7 @@ public:
 
 	void conductExam() {
 		string Class;
+		cout << string(100, '-') << endl;
 		cout << "\t\t\t\tEnter the class for which you want to conduct the exam\n\t\t\t\t ";
 		cin >> Class;
 
@@ -444,6 +457,7 @@ public:
 		}
 
 		string examType;
+		cout << string(100, '-') << endl;
 		cout << "\t\t\t\tEnter the type of exam (midterm/final): ";
 		cin >> examType;
 
@@ -500,6 +514,7 @@ public:
 		system("cls");
 
 	l:
+		cout << string(100, '-') << endl;
 		cout << "\t\t\t\tEnter the class for which you want to assign grades:\n\t\t\t\t ";
 		cin >> Class;
 		bool classFound = false;
@@ -518,6 +533,7 @@ public:
 						string finalStudentGrades;
 						for (int j = 0; j < 5; ++j) {
 							string chosenSubject = subjects[j];
+							cout << string(100, '-') << endl;
 							cout << "Subject: " << chosenSubject << endl;
 							cout << "Enter mid-term exam marks: ";
 							int midTermMarks;
@@ -614,7 +630,7 @@ public:
 		for (int i = 0; i < count; i++) {
 			if (choice == 1) {
 				if (!idEntered) {
-
+					cout << string(100, '-') << endl;
 					cout << "Enter the class of student: ";
 					cin >> Class;
 					cout << "Enter the ID of the student: ";
@@ -655,6 +671,7 @@ public:
 			}
 			else if (choice == 2) {
 				if (!idEntered) {
+
 					cout << "Enter the ID of the student: ";
 					cin >> id;
 					cin.ignore();
@@ -693,86 +710,88 @@ public:
 };
 
 
-//class attendence : public teachers, public Exam {
-//	string student_attendence;
-//	Student* student;
-//	int count;
-//	ofstream file;
-//public:
-//	attendence(Student* student, int count) {
-//		this->student = student;
-//		this->count = count;
-//	}
-//	void attendence_mark() {
-//		ofstream file("attendence.csv");
-//		int enter;
-//		cout << "Do you want to login as a teacher? \n If yes press 1 else press 0\n";
-//		cin >> enter;
-//		if (enter == 1) {
-//			cout << "Enter your id\n";
-//			cin >> enter;
-//			if (str_teacher_ids.find(enter))
-//			{
-//				system("CLS");
-//				cout << "You have entered as the teacher of " << enter << " class\n";
-//				int option(0);
-//				string mark;
-//				while (option != -1) {
-//					cout << "Press 1 if you want to mark attendence\n";
-//					cout << "Press 2 if you want to see previous attendences\n";
-//					cout << "Press 3 if you want to see particular student attendence\n";
-//					cout << "Press 4 to conduct exam\n";
-//					cout << "press 5 to assign  grades\n";
-//					cout << "Press -1 to exit\n";
-//					cin >> option;
-//					if (option == 1) {
-//						file << "class,id,name,attendence\n";
-//						for (int i = 0; i < count; i++)
-//							if (enter == student[i].getClass()) {
-//								cout << "Press p to mark presence or a to mark absence of student\n";
-//								cout << "ID of the student " << student[i].getid() << endl;
-//								cout << "Name of the student " << student[i].getname() << endl;
-//								cin >> mark;
-//								mark = to_string(student[i].getClass()) + ',' + to_string(student[i].getid()) +
-//									',' + student[i].getname() + ',' + mark + "\n";
-//								file << mark;
-//								student_attendence += mark;
-//								mark.empty();
-//								cout << student_attendence << endl;
-//							}
-//
-//					}
-//					else if (option == 2) {
-//						cout << "class id name attendence\n";
-//						for (option = 0; option < student_attendence.length(); option++)
-//							if (student_attendence[option] == '\n') cout << endl;
-//							else if (student_attendence[option] == ',') cout << " ";
-//							else cout << student_attendence[option];
-//						cout << endl;
-//					}
-//					else if (option == 3) {
-//						cout << "Enter id of particular student\n";
-//						cin >> mark;
-//						size_t record = student_attendence.find(mark);
-//						size_t end_record = student_attendence.find('\n', record);
-//						mark.empty();
-//						mark = student_attendence.substr(record, end_record - record);
-//						cout << mark << endl;
-//					}
-//					else if (option == 4) {
-//						Exam exam(student, count);
-//						exam.conductExam();
-//					}
-//					else if (option == 5) {
-//						grades grade(student, count);
-//						grade.assignGrades();
-//					}
-//				}
-//			}
-//		}
-//		file.close();
-//	}
-//};
+class teacher_functionalities : public teachers, public Exam {
+	string student_attendence;
+	Student* student;
+	int count;
+	ofstream file;
+public:
+	teacher_functionalities(Student* student, int count) {
+		this->student = student;
+		this->count = count;
+	}
+	void functionalities() {
+		ofstream file(attend);
+		int enter;
+		cout << "Do you want to login as a teacher? \n If yes press 1 else press 0\n";
+		cin >> enter;
+		if (enter == 1) {
+			cout << "Enter your id\n";
+			cin >> enter;
+			if (str_teacher_ids.find(enter))
+			{
+				system("CLS");
+				cout << "You have entered as the teacher of " << enter << " class\n";
+
+				int option(0);
+				string mark;
+				while (option != -1) {
+					cout << string(100, '-') << endl;
+					cout << "Press 1 if you want to mark attendence\n";
+					cout << "Press 2 if you want to see previous attendences\n";
+					cout << "Press 3 if you want to see particular student attendence\n";
+					cout << "Press 4 to conduct exam\n";
+					cout << "press 5 to assign  grades\n";
+					cout << "Press -1 to exit\n";
+					cin >> option;
+					if (option == 1) {
+						file << "class,id,name,attendence\n";
+						for (int i = 0; i < count; i++)
+							if (enter == student[i].getClass()) {
+								cout << "Press p to mark presence or a to mark absence of student\n";
+								cout << "ID of the student " << student[i].getid() << endl;
+								cout << "Name of the student " << student[i].getname() << endl;
+								cin >> mark;
+								mark = to_string(student[i].getClass()) + ',' + to_string(student[i].getid()) +
+									',' + student[i].getname() + ',' + mark + "\n";
+								file << mark;
+								student_attendence += mark;
+								mark.empty();
+								cout << student_attendence << endl;
+							}
+
+					}
+					else if (option == 2) {
+						cout << "class id name attendence\n";
+						for (option = 0; option < student_attendence.length(); option++)
+							if (student_attendence[option] == '\n') cout << endl;
+							else if (student_attendence[option] == ',') cout << " ";
+							else cout << student_attendence[option];
+						cout << endl;
+					}
+					else if (option == 3) {
+						cout << "Enter id of particular student\n";
+						cin >> mark;
+						size_t record = student_attendence.find(mark);
+						size_t end_record = student_attendence.find('\n', record);
+						mark.empty();
+						mark = student_attendence.substr(record, end_record - record);
+						cout << mark << endl;
+					}
+					else if (option == 4) {
+						Exam exam(student, count);
+						exam.conductExam();
+					}
+					else if (option == 5) {
+						grades grade(student, count);
+						grade.assignGrades();
+					}
+				}
+			}
+		}
+		file.close();
+	}
+};
 
 string toLower(const string& str) {
 	string result;
@@ -804,9 +823,7 @@ int NoofStudents()
 		while (getline(input, waste, '\n'))
 		{
 			count++;
-
 		}
-		//read no of lines in a txt file
 	}
 	else
 	{
@@ -828,14 +845,10 @@ void studentReadFile(Student*& students, int& count)
 		for (int i = 0; i < count; i++)
 		{
 			input >> id >> fee >> PendingBalance >> Class;
-
-
 			getline(input, name, '#');
 			getline(input, fathername, '#');
 			input >> monthlyFeePaid;
-
 			students[i] = Student(name, fathername, id, fee, PendingBalance, Class, monthlyFeePaid);
-
 		}
 		input.close();
 	}
@@ -906,6 +919,7 @@ void Display(Student* students, int count)
 	}
 	else if (tempchoice == 2)
 	{
+		cout << string(100, '-') << endl;
 		cout << "Enter The Class you want to Search: ";
 		cin >> innerchoice;
 		for (int i = 0; i < count; i++)
@@ -941,6 +955,7 @@ void Search(Student* students, int count)
 		{
 			found = false;
 			system("cls");
+			cout << string(100, '-') << endl;
 			cout << "ID: " << students[i].getid() << endl;
 			cout << "Name: " << students[i].getname() << endl;
 			cout << "Class : " << students[i].getClass() << endl;
@@ -971,6 +986,7 @@ void SearchFamily(Student* students, int count)
 		{
 			found = false;
 			cout << endl << endl;
+			cout << string(100, '-') << endl;
 			cout << "ID: " << students[i].getid() << endl;
 			cout << "Name: " << students[i].getname() << endl;
 			cout << "Father Name:" << students[i].getfathername() << endl;
@@ -1016,6 +1032,7 @@ void overview(Student* students, int count)
 		NetIncome += students[i].getfee();
 	}
 	cout << "\n\n";
+	cout << string(100, '-') << endl;
 	cout << "Pending Balance : " << setw(2) << PendingBalance << endl;
 	cout << "The Net Income : " << setw(2) << NetIncome << endl << endl;
 	delete[] Classes;
@@ -1401,6 +1418,7 @@ again:
 		{
 			system("cls");
 			found = false;
+			cout << string(100, '-') << endl;
 			cout << "Student With Found\n";
 			cout << "ID: " << students[i].getid() << endl;
 			cout << "Class : " << students[i].getClass() << endl;
@@ -1496,6 +1514,7 @@ void addMonthlyFee(Student* students, int count)
 				iteration++;
 				system("cls");
 				found = false;
+				cout << string(100, '-') << endl;
 				cout << "Student With Found\n";
 				cout << "ID: " << students[i].getid() << endl;
 				cout << "Class : " << students[i].getClass() << endl;
@@ -1820,6 +1839,7 @@ public:
 		system("CLS");
 		for (int i = 0; i < alumni_count; i++)
 		{
+			cout << string(100, '-') << endl;
 			cout << "Alumni # " << i + 1 << " \n";
 			cout << "ID: " << alumni_id.at(i)
 				<< "\nName: " << alumni_name.at(i)
@@ -1855,6 +1875,7 @@ public:
 		else
 		{
 			system("cls");
+			cout << string(100, '-') << endl;
 			cout << "Record Found For The ID: " << alumni_id.at(index)
 				<< "\nName: " << alumni_name.at(index)
 				<< "\nFather Name: " << alumni_father_name[index]
@@ -1920,6 +1941,7 @@ rep:
 		totalExpenses += other_expenses_value[i];
 	int profit = totalFeePaid - totalExpenses;
 	system("cls");
+	cout << string(100, '-') << endl;
 	cout << "Monthly Report\n";
 	cout << "Comultative Fee Of Students: Pkr ";
 	cout << totalFee << "/_" << endl;
