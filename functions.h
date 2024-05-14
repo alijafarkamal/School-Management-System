@@ -285,7 +285,7 @@ public:
 		if (!str_teacher_name.empty()) {
 			str_teacher_name.pop_back(); // Remove the last character (the trailing comma)
 		}
-		cout << str_teacher_heading << endl << str_teacher_ids << endl << str_teacher_name << endl << str_teacher_leave << endl << str_teacher_class;
+		//cout << str_teacher_heading << endl << str_teacher_ids << endl << str_teacher_name << endl << str_teacher_leave << endl << str_teacher_class;
 		sqlite3_finalize(stmt);
 		sqlite3_close(db);
 		_getch();
@@ -654,7 +654,7 @@ public:
 							//	system("cls");
 						}
 						MgradesFile << midTermStudentGrades << endl;
-						FgradesFile <<"class"<< finalStudentGrades << endl;
+						FgradesFile << finalStudentGrades << endl;
 						midTermGrades[k] = midTermStudentGrades;
 						finalGrades[k] = finalStudentGrades;
 						system("cls");
@@ -1701,6 +1701,7 @@ public:
 				}
 			}
 			ifstream gradeFile("finalgrades.txt");
+
 			if (!gradeFile.fail())
 			{
 				string temp;
@@ -1729,7 +1730,6 @@ public:
 							string id = temp.substr(pos);
 
 							int index = 0;
-
 							Search(students, count, index, stoi(id));
 							if (students[index].getClass() == 10)
 							{
@@ -1970,10 +1970,6 @@ public:
 			cout << endl;
 			return true;
 		}
-	}
-	~Alumni()
-	{
-		cout << "Destructor of alumni called \n";
 	}
 };
 
