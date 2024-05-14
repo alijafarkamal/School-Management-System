@@ -1,6 +1,18 @@
-Class 6,math,A,1009
+6,math,A,1009
 6,urdu,A,1009
 6,isl,A,1009
 6,science,A,1009
 6,eng,A,1009
+
+10,math,A,1002
+10,urdu,A,1002
+10,isl,A,1002
+10,science,A,1002
+10,eng,A,1002
+
+10,math,A,1003
+10,urdu,A,1003
+10,isl,A,1003
+10,science,A,1003
+10,eng,A,1003
 

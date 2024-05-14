@@ -640,7 +640,7 @@ public:
 							//	system("cls");
 						}
 						MgradesFile << midTermStudentGrades << endl;
-						FgradesFile <<"Class "<< finalStudentGrades << endl;
+						FgradesFile << finalStudentGrades << endl;
 						midTermGrades[k] = midTermStudentGrades;
 						finalGrades[k] = finalStudentGrades;
 						system("cls");
@@ -681,6 +681,7 @@ public:
 					cin >> Class;
 					cout << "Enter the ID of the student: ";
 					cin >> id;
+					cout << "Class,Subject,Grade,ID\n";
 					cin.ignore();
 					idEntered = true;
 				}
@@ -721,6 +722,8 @@ public:
 					cin >> Class;
 					cout << "Enter the ID of the student: ";
 					cin >> id;
+					cout << "Class,Subject,Grade,ID\n";
+
 					cin.ignore();
 					idEntered = true;
 				}
