@@ -193,9 +193,9 @@ int main()
 		Alumni alumni;
 		ifstream input("student.txt");
 		string name, password, fathername;
-		teachers_management teacher;
 		non_teaching_staff_management other;
 		teacher_functionalities teacher_func(students, count);
+		teacher_func.teachers::display();
 		int id, fee, invalidTry = 3, choice = 0, PendingBalance, Class, InnerChoice;
 		int monthlyFeePaid = 0;
 		if (input.is_open())
@@ -373,10 +373,10 @@ int main()
 					cout << "Press 4 to display teacher\n";
 					cout << "Press 5 to exit\n";
 					cin >> choice;
-					if (choice == 1) teacher.add();
-					else if (choice == 2) teacher.update();
-					else if (choice == 3) teacher.remove();
-					else if (choice == 4) teacher.display();
+					if (choice == 1) teacher_func.add();
+					else if (choice == 2) teacher_func.update();
+					else if (choice == 3) teacher_func.remove();
+					else if (choice == 4) teacher_func.display();
 
 					cout << "\nTHis is func \n\n";
 					//teacher_func.display();

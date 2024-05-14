@@ -226,7 +226,12 @@ public:
 			istringstream(class_str) >> class_;
 			istringstream(join_year_str) >> join_year;
 			istringstream(leave_year_str) >> leave_year;
-
+			//cout << str_teacher_class << endl;
+			//cout << str_teacher_ids << endl;
+			//cout << str_teacher_join << endl;
+			//cout << str_teacher_leave << endl;
+			//cout << str_teacher_name << endl;
+			////cout << id << endl;
 			ostringstream query;
 			query << "INSERT INTO teachers VALUES (" << id << ", '" << name << "', " << salary << ", " << class_ << ", " << join_year << ", " << leave_year << ");";
 			rc = sqlite3_exec(db, query.str().c_str(), NULL, NULL, &err);
@@ -234,11 +239,12 @@ public:
 				cout << "Error inserting data: " << err << endl;
 				sqlite3_free(err);
 			}
+
 		}
 		sqlite3_close(db);
 	}
 
-	void display() {
+	virtual void display() {
 		sqlite3* db;
 		char* err;
 		int rc = sqlite3_open("teachers.db", &db);
@@ -337,15 +343,19 @@ public:
 		int choice;
 		string str_remove;
 	ID_teachers_remover:
+		cout << str_teacher_ids;
 		cout << "Enter his id\n";
 		cin >> str_remove;
 		//cout << other_staff_id;
+		
 		choice = str_teacher_ids.find(str_remove);
 		if (choice == string::npos) {
 			cout << "ID not found\n";
 			goto ID_teachers_remover;
 		}
-		int comma_counter = count(str_teacher_ids.begin(), str_teacher_ids.begin() + choice, ' ');
+		cout << choice << endl;
+		int comma_counter = count(str_teacher_ids.begin(), str_teacher_ids.begin() + choice, ',');
+		cout << comma_counter << endl;
 		//cout << comma_counter << endl; 
 		string data_store; int counter(0);
 		ifstream file(file_teachers);
@@ -354,6 +364,7 @@ public:
 			if (counter != comma_counter + 1) {
 				data_store_temp += data_store + "\n";// << endl;
 			}
+			else cout <<"My lord "<< data_store << endl;
 			counter++;
 			data_store.empty();
 		}
@@ -368,13 +379,14 @@ public:
 		str_teacher_salary.erase();
 		str_teacher_join.erase();
 		str_teacher_leave.erase();
-		//teacheruploader();
+		teacherUploader();
 		//cout << str_teacher_ids << endl;
 		//cout << str_teacher_name << endl;
 		//cout << str_teacher_salary << endl;
 		//cout << str_teacher_class << endl;
 		//cout << str_teacher_join << endl;
 		//cout << str_teacher_leave << endl;
+		_getch();
 	}
 
 	void update() {
@@ -389,6 +401,7 @@ public:
 			cout << "id not found\n";
 			goto id_updater;
 		}
+		cout << reply << endl;
 		cout << "Enter his updated id\n";
 		cin >> str_add;
 		mark += str_add + ',';
@@ -413,24 +426,25 @@ public:
 		//other_staff_profession += " " + str_add;
 		string data_store;
 		ifstream file(file_teachers);
-		int comma_counter = count(str_teacher_ids.begin(), str_teacher_ids.begin() + reply, ' ');
+		//cout << reply << endl;
+		int comma_counter = count(str_teacher_ids.begin(), str_teacher_ids.begin() + reply, ',');
+		//cout << comma_counter << endl;
 		int counter(0);
 		string data_store_temp;
 		while (getline(file, data_store)) {
-			if (counter != comma_counter + 1) {
+			if (counter != comma_counter + 1) 
 				data_store_temp += data_store + "\n";
-			}
-			else {
+			else 
 				data_store_temp += mark;
-			}
 			data_store.empty();
 			counter++;
 		}
 		ofstream file_out(file_teachers);
 		file_out << data_store_temp;
 		file_out.close();
+		_getch();
 	}
-	void display() {
+	void display() override final{
 		ifstream file(file_teachers);
 		string display_mode;
 		cout << string(100, '-') << endl;
@@ -640,7 +654,7 @@ public:
 							//	system("cls");
 						}
 						MgradesFile << midTermStudentGrades << endl;
-						FgradesFile << finalStudentGrades << endl;
+						FgradesFile <<"class"<< finalStudentGrades << endl;
 						midTermGrades[k] = midTermStudentGrades;
 						finalGrades[k] = finalStudentGrades;
 						system("cls");
@@ -765,7 +779,7 @@ public:
 };
 
 
-class teacher_functionalities : public teachers, public Exam {
+class teacher_functionalities : public teachers_management, public Exam {
 	string student_attendence;
 	Student* student;
 	int count;
@@ -1687,7 +1701,6 @@ public:
 				}
 			}
 			ifstream gradeFile("finalgrades.txt");
-
 			if (!gradeFile.fail())
 			{
 				string temp;

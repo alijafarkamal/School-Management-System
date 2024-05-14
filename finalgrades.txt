@@ -1,18 +1,30 @@
-6,math,A,1009
+class6,math,A,1009
 6,urdu,A,1009
 6,isl,A,1009
 6,science,A,1009
 6,eng,A,1009
 
-10,math,A,1002
+class10,math,A,1002
 10,urdu,A,1002
 10,isl,A,1002
 10,science,A,1002
 10,eng,A,1002
 
-10,math,A,1003
+class10,math,A,1003
 10,urdu,A,1003
 10,isl,A,1003
 10,science,A,1003
 10,eng,A,1003
+
+class2,math,A,1012
+2,urdu,A,1012
+2,isl,A,1012
+2,science,A,1012
+2,eng,A,1012
+
+class2,math,A,1013
+2,urdu,A,1013
+2,isl,A,1013
+2,science,A,1013
+2,eng,A,1013
 

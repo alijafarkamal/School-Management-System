@@ -16,3 +16,15 @@
 10,science,A,1003
 10,eng,A,1003
 
+2,math,A,1012
+2,urdu,A,1012
+2,isl,A,1012
+2,science,A,1012
+2,eng,A,1012
+
+2,math,A,1013
+2,urdu,A,1013
+2,isl,A,1013
+2,science,A,1013
+2,eng,A,1013
+
