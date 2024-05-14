@@ -1,15 +1,17 @@
 ﻿
 #include "functions.h"
 using namespace std;
-class other_staff {
+class non_teaching_staff {
 protected:
 	string other_staff_id;
 	string other_staff_name;
 	string other_staff_salary;
 	string other_staff_profession;
 	static int other_staff_number;
+	Student_management_system* student_manage;
+	Student student_info;
 public:
-	other_staff() {
+	non_teaching_staff() {
 		this->initializer();
 	}
 	void initializer() {
@@ -40,11 +42,16 @@ public:
 			}
 		}
 	}
+	~non_teaching_staff()
+	{
+
+		cout << "Destructor of non teaching staff called \n";
+	}
 };
-int other_staff::other_staff_number = 6;
-class other_staff_management : public other_staff {
+int non_teaching_staff::other_staff_number = 6;
+class non_teaching_staff_management : public non_teaching_staff {
 public:
-	other_staff_management() {
+	non_teaching_staff_management() {
 	}
 	void add() {
 		int choice;
@@ -72,7 +79,7 @@ public:
 		cin >> str_add;
 		mark += str_add + '\n';
 		other_staff_profession += " " + str_add;
-		ofstream file("other_staff.csv", ios::app);
+		ofstream file("non_teaching_staff.csv", ios::app);
 		file << mark;
 		file.close();
 	}
@@ -82,7 +89,7 @@ public:
 	ID_remover:
 		cout << "Enter his id\n";
 		cin >> str_remove;
-		cout << other_staff_id;
+		//cout << other_staff_id;
 		choice = other_staff_id.find(str_remove);
 		if (choice == string::npos) {
 			cout << "ID not found\n";
@@ -110,10 +117,12 @@ public:
 		other_staff_salary.erase();
 		other_staff_profession.erase();
 		initializer();
-		cout << other_staff_id << endl;
-		cout << other_staff_name << endl;
-		cout << other_staff_salary << endl;
-		cout << other_staff_profession << endl;
+		cout << "Successfully removed id \n";
+		//cout << other_staff_id << endl;
+		//cout << other_staff_name << endl;
+		//cout << other_staff_salary << endl;
+		//cout << other_staff_profession << endl;
+		_getch();
 	}
 
 	void update() {
@@ -165,76 +174,79 @@ public:
 	}
 	void display() {
 		ifstream file(file_other_staff);
+		if (!file.is_open())
+			cout << "File cannot be opened \n";
 		string display_mode;
 		while (getline(file, display_mode)) {
-		}
-		cout << display_mode;
+			cout << display_mode << endl;
+		}	
+		_getch();
 	}
 };
 int main()
 {
-
-
-
-	int count = NoofStudents();
-	Student* students = new Student[count];
-	Alumni alumni;
-	ifstream input("student.txt");
-	string name, password, fathername;
-	teachers_management teacher;
-	other_staff_management other;
-	teacher_functionalities teacher_func(students, count);
-	int id, fee, invalidTry = 3, choice = 0, PendingBalance, Class, InnerChoice;
-	int monthlyFeePaid = 0;
-	if (input.is_open())
-	{
-		for (int i = 0; i < count; i++)
+	try {
+		Student_management_system* stu = new Student;
+		Student* pupil = dynamic_cast<Student*>(stu);
+		int count = NoofStudents();
+		Student* students = new Student[count];
+		Alumni alumni;
+		ifstream input("student.txt");
+		string name, password, fathername;
+		teachers_management teacher;
+		non_teaching_staff_management other;
+		teacher_functionalities teacher_func(students, count);
+		int id, fee, invalidTry = 3, choice = 0, PendingBalance, Class, InnerChoice;
+		int monthlyFeePaid = 0;
+		if (input.is_open())
 		{
-			input >> id >> fee >> PendingBalance >> Class;
+			for (int i = 0; i < count; i++)
+			{
+				input >> id >> fee >> PendingBalance >> Class;
 
 
-			getline(input, name, '#');
-			getline(input, fathername, '#');
-			input >> monthlyFeePaid;
+				getline(input, name, '#');
+				getline(input, fathername, '#');
+				input >> monthlyFeePaid;
 
-			students[i] = Student(name, fathername, id, fee, PendingBalance, Class, monthlyFeePaid);
+				students[i] = Student(name, fathername, id, fee, PendingBalance, Class, monthlyFeePaid);
 
-		}
-		input.close();
-	}
-	else
-	{
-		cout << "Error Opening the File Student.txt\n";
-	}
-
-invalid:
-	if (invalidTry > 0)
-	{
-		//setCursorPosition(10, 10);
-		//setColor(12);
-		cout << "Enter the Password To Continue\n";
-		getline(cin, password);
-		if (password != "hello")
-		{
-			system("cls");
-			cout << "Invalid Password\n";
-			invalidTry--;
-			cout << "Remaining Tries: " << invalidTry << endl;
-			goto invalid;
+			}
+			input.close();
 		}
 		else
 		{
-			system("cls");
-			setColor(10);
-			cout << "You Successfully Entered as ADMIN\n";
+			cout << "Error Opening the File Student.txt\n";
 		}
 
-		while (choice != -1)
+	invalid:
+		if (invalidTry > 0)
 		{
-			setCursorPosition(10, 10);
-			setColor(15);
-			system("cls");
-			cout << R"(
+			//setCursorPosition(10, 10);
+			//setColor(12);
+			cout << "Enter the Password To Continue\n";
+			getline(cin, password);
+			if (password != "hello")
+			{
+				system("cls");
+				cout << "Invalid Password\n";
+				invalidTry--;
+				cout << "Remaining Tries: " << invalidTry << endl;
+				goto invalid;
+			}
+			else
+			{
+				system("cls");
+				setColor(10);
+				cout << "You Successfully Entered as ADMIN\n";
+			}
+
+			while (choice != -1)
+			{
+				setCursorPosition(10, 10);
+				setColor(15);
+				system("cls");
+				cout << R"(
  _    _      _                            _         ___  ___      _        ___  ___                 
 | |  | |    | |                          | |        |  \/  |     (_)       |  \/  |                 
 | |  | | ___| | ___ ___  _ __ ___   ___  | |_ ___   | .  . | __ _ _ _ __   | .  . | ___ _ __  _   _ 
@@ -242,172 +254,189 @@ invalid:
 \  /\  |  __| | (_| (_) | | | | | |  __/ | || (_) | | |  | | (_| | | | | | | |  | |  __| | | | |_| |
  \/  \/ \___|_|\___\___/|_| |_| |_|\___|  \__\___/  \_|  |_/\__,_|_|_| |_| \_|  |_/\___|_| |_|\__,_|
 )" << '\n';
-			//setColor(11);
-			//cout << "\t\t\tWELCOME TO MAIN MENU\n";
-			setColor(12);
-			cout << string(100, '-') << endl;
-			setColor(15);
-			cout << "1.  To Display Student Records\n";
-		//	cout << string(80, '-') << endl;
-			cout << "2.  To Display Details Of a Particular Student\n";
-			//cout << string(80, '-') << endl;
-			cout << "3.  To Give and OverView\n";
-		//	cout << string(80, '-') << endl;
-			cout << "4.  To Enter Financial Mode\n";
-		//	cout << string(80, '-') << endl;
-			cout << "5.  To Enter A New Student\n";
-		//	cout << string(80, '-') << endl;
-			cout << "6.  To Remove a Student\n";
-		//	cout << string(80, '-') << endl;
-			cout << "7.  To Edit Student Details\n";
-		//	cout << string(80, '-') << endl;
-			cout << "8.  To Make A Defaulter List\n";
-		//	cout << string(80, '-') << endl;
-			cout << "9.  To Enter as a teacher\n";
-		//	cout << string(80, '-') << endl;
-			cout << "10. To Manage non-teaching staff\n";
-		//	cout << string(80, '-') << endl;
-			cout << "11. To Manage teachers\n";
-		//	cout << string(80, '-') << endl;
-			cout << "12. To Enter Monthly Fee Payment\n";
-			//cout << string(100, '-') << endl;
-			cout << "13. To Enter Alumni Mode\n";
-			//cout << string(80, '-') << endl;
-			cout << "14. To Generate Monthly Report\n";
-			//cout << string(80, '-') << endl;
-			setColor(12);
-			cout << "Press -1 to exit\n";
-			cout << string(100, '-') << endl;
-			setColor(15);
-			cin >> choice;
-			
-			if (choice == 1)
-			{
-				Display(students, count);
-			}
-			else if (choice == 2)
-			{
-				system("cls");
-				cout << "1. To Search By Father Name\n";
-				cout << "2. To Search By ID Number\n";
-				cin >> InnerChoice;
-				if (InnerChoice == 1)
-				{
-					SearchFamily(students, count);
-				}
-				else if (InnerChoice == 2)
-				{
-					Search(students, count);
-				}
-			}
-			else if (choice == 3)
-			{
-				overview(students, count);
-			}
-			else if (choice == 4)
-			{
-				financial(students, count);
-				UpdatingData(students, count);
-			}
-			else if (choice == 5)
-			{
-				students = addStudent(students, count);
-				UpdatingData(students, count);
-			}
-			else if (choice == 6)
-			{
-				students = removeStudent(students, count);
-				UpdatingData(students, count);
-			}
-			else if (choice == 7)
-			{
-				EditInfo(students, count);
-				UpdatingData(students, count);
-			}
-			else if (choice == 8)
-			{
-				DefaulterList(students, count);
-			}
-			else if (choice == 9) {
-				teacher_func.functionalities();
-			}
-			else if (choice == 10) {
+				//setColor(11);
+				//cout << "\t\t\tWELCOME TO MAIN MENU\n";
+				setColor(12);
 				cout << string(100, '-') << endl;
-				cout << "Press 1 to add non-teaching staff \n";
-				cout << "Press 2 to update non-teaching staff \n";
-				cout << "Press 3 to remove non-teaching staff \n";
-				cout << "Press 4 to display non-teaching staff \n";
-				cout << "Press 5 to exit\n";
-				cin >> choice;
-				if (choice == 1) other.add();
-				else if (choice == 2) other.update();
-				else if (choice == 3) other.remove();
-				else if (choice == 4) other.display();
-			}
-			else if (choice == 11) {
+				setColor(15);
+				cout << "1.  To Display Student Records\n";
+				//	cout << string(80, '-') << endl;
+				cout << "2.  To Display Details Of a Particular Student\n";
+				//cout << string(80, '-') << endl;
+				setColor(14);
+				cout << "3.  To Give and OverView\n";
+				setColor(15);
+				//	cout << string(80, '-') << endl;
+				cout << "4.  To Enter Financial Mode\n";
+				//	cout << string(80, '-') << endl;
+				setColor(14);
+				cout << "5.  To Enter A New Student\n";
+				setColor(15);
+				//	cout << string(80, '-') << endl;
+				cout << "6.  To Remove a Student\n";
+				//	cout << string(80, '-') << endl;
+				cout << "7.  To Edit Student Details\n";
+				//	cout << string(80, '-') << endl;
+				cout << "8.  To Make A Defaulter List\n";
+				//	cout << string(80, '-') << endl;
+				setColor(14);
+				cout << "9.  To Enter as a teacher\n";
+				setColor(15);
+				//	cout << string(80, '-') << endl;
+				cout << "10. To Manage non-teaching staff\n";
+				//	cout << string(80, '-') << endl;
+				cout << "11. To Manage teachers\n";
+				//	cout << string(80, '-') << endl;
+				cout << "12. To Enter Monthly Fee Payment\n";
+				//cout << string(100, '-') << endl;
+				setColor(14);
+				cout << "13. To Enter Alumni Mode\n";
+				setColor(15);
+				//cout << string(80, '-') << endl;
+				cout << "14. To Update alumni data \n";
+				cout << "15. To Generate Monthly Report\n";
+				//cout << string(80, '-') << endl;
+				setColor(12);
+				cout << "Press -1 to exit\n";
 				cout << string(100, '-') << endl;
-				cout << "Press 1 to add teacher\n";
-				cout << "Press 2 to update teacher\n";
-				cout << "Press 3 to remove teacher\n";
-				cout << "Press 4 to display teacher\n";
-				cout << "Press 5 to exit\n";
+				setColor(15);
 				cin >> choice;
-				if (choice == 1) teacher.add();
-				else if (choice == 2) teacher.update();
-				else if (choice == 3) teacher.remove();
-				else if (choice == 4) teacher.display();
-			}
-			else if (choice == 12)
-			{
-				addMonthlyFee(students, count);
-			}
-			else if (choice == 13)
-			{
-				system("cls");
-				cout << "Enter: \n1. To Display All Alumni\n2. To Search An Alumni\n";
-				cout << "Enter Your Choice: ";
-				cin >> InnerChoice;
-				if (InnerChoice == 1)
+				if (choice < -1) throw choice;
+				if (choice == 1)
 				{
-					alumni.display();
+					Display(students, count);
 				}
-				else
+				else if (choice == 2)
 				{
-					cout << "Enter Alumni's ID: ";
-					string alumniID;
-				rep:
-					cin >> alumniID;
-					if (alumni.display(alumniID))
+					system("cls");
+					cout << "1. To Search By Father Name\n";
+					cout << "2. To Search By ID Number\n";
+					cin >> InnerChoice;
+					if (InnerChoice == 1)
 					{
-						cout << "\nPress Any Key to Continue\n";
-						_getch();
+						SearchFamily(students, count);
+					}
+					else if (InnerChoice == 2)
+					{
+						Search(students, count);
+					}
+				}
+				else if (choice == 3)
+				{
+					overview(students, count);
+				}
+				else if (choice == 4)
+				{
+					financial(students, count);
+					UpdatingData(students, count);
+				}
+				else if (choice == 5)
+				{
+					students = addStudent(students, count);
+					UpdatingData(students, count);
+				}
+				else if (choice == 6)
+				{
+					students = removeStudent(students, count);
+					UpdatingData(students, count);
+				}
+				else if (choice == 7)
+				{
+					EditInfo(students, count);
+					UpdatingData(students, count);
+				}
+				else if (choice == 8)
+				{
+					DefaulterList(students, count);
+				}
+				else if (choice == 9) {
+					teacher_func.functionalities();
+				}
+				else if (choice == 10) {
+					cout << string(100, '-') << endl;
+					cout << "Press 1 to add non-teaching staff \n";
+					cout << "Press 2 to update non-teaching staff \n";
+					cout << "Press 3 to remove non-teaching staff \n";
+					cout << "Press 4 to display non-teaching staff \n";
+					cout << "Press 5 to exit\n";
+					cin >> choice;
+					if (choice == 1) other.add();
+					else if (choice == 2) other.update();
+					else if (choice == 3) other.remove();
+					else if (choice == 4) other.display();
+				}
+				else if (choice == 11) {
+					cout << string(100, '-') << endl;
+					cout << "Press 1 to add teacher\n";
+					cout << "Press 2 to update teacher\n";
+					cout << "Press 3 to remove teacher\n";
+					cout << "Press 4 to display teacher\n";
+					cout << "Press 5 to exit\n";
+					cin >> choice;
+					if (choice == 1) teacher.add();
+					else if (choice == 2) teacher.update();
+					else if (choice == 3) teacher.remove();
+					else if (choice == 4) teacher.display();
+
+					cout << "\nTHis is func \n\n";
+					//teacher_func.display();
+				}
+				else if (choice == 12)
+				{
+					addMonthlyFee(students, count);
+				}
+				else if (choice == 13)
+				{
+					system("cls");
+					cout << "Enter: \n1. To Display All Alumni\n2. To Search An Alumni\n";
+					cout << "Enter Your Choice: ";
+					cin >> InnerChoice;
+					if (InnerChoice == 1)
+					{
+						alumni.display();
 					}
 					else
 					{
-						cout << "Enter Again: ";
-						goto rep;
+						cout << "Enter Alumni's ID: ";
+						string alumniID;
+					rep:
+						cin >> alumniID;
+						if (alumni.display(alumniID))
+						{
+							cout << "\nPress Any Key to Continue\n";
+							_getch();
+						}
+						else
+						{
+							cout << "Enter Again: ";
+							goto rep;
+						}
 					}
 				}
-			}
-			else if (choice == 14) {
-				alumni.updateData();
-			}
-			else if (choice == 15)
-			{
-				monthlyReport(students, count);
+				else if (choice == 14) {
+					alumni.updateData();
+				}
+				else if (choice == 15)
+				{
+					monthlyReport(students, count);
+				}
 			}
 		}
+		else
+		{
+			setColor(12); // Red
+			cout << "Crashed !\n";
+			return 0;
+			cout << "Crashed !\n";
+			return 0;
+		}
+		delete[] students;
+		delete[] stu;
+		cout << string(100, '-') << endl;
 	}
-	else
-	{
-		setColor(12); // Red
-		cout << "Crashed !\n";
-		return 0;
-		cout << "Crashed !\n";
-		return 0;
+	catch (int x) {
+		cout << "\nException caught. You entered negative value \n";
 	}
-	delete[] students;
-	cout << string(100, '-') << endl;
 	system("pause");
 	return 0;
 }

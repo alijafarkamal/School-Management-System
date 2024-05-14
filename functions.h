@@ -11,7 +11,7 @@
 #include"sqlite/sqlite3.h"
 using namespace std;
 const string attend = "attendence.csv";
-const string file_other_staff = "other_staff.csv";
+const string file_other_staff = "non_teaching_staff.csv";
 const string file_teachers = "teachers.csv";
 
 // Function to set the cursor position in the console
@@ -26,7 +26,18 @@ void setCursorPosition(int x, int y) {
 void setColor(int color) {
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color);
 }
-class Student
+class Student_management_system {
+public:
+	virtual void student_info_set() = 0;
+	virtual int student_info_get() = 0;
+	virtual void teacher_info_set() = 0;
+	virtual int teacher_info_get() = 0;
+	~Student_management_system();
+};
+Student_management_system::~Student_management_system() {
+	//cout << "Destructor of SMS called \n";
+}
+class Student : public Student_management_system
 {
 private:
 	string name;
@@ -134,6 +145,25 @@ public:
 		cout << endl;
 		return output;
 	}
+	~Student()
+	{
+		//cout << "Destructor of student class called \n";
+	}
+	void student_info_set() override {
+		cout << "This is setter function of student info\n";
+	}
+	int student_info_get() override {
+	 cout << "This is getter function of student info\n";
+	 return 1;
+	}
+	void teacher_info_set()override {
+	 cout << "This is setter function of teacher info\n";
+	}
+	int teacher_info_get() override {
+	 cout << "This is getter function of teacher info\n";
+	 return 1;
+	}
+	
 };
 class teachers {
 protected:
@@ -252,6 +282,11 @@ public:
 		cout << str_teacher_heading << endl << str_teacher_ids << endl << str_teacher_name << endl << str_teacher_leave << endl << str_teacher_class;
 		sqlite3_finalize(stmt);
 		sqlite3_close(db);
+		_getch();
+	}
+	~teachers()
+	{
+		cout << "Destructor of teacher class called \n";
 	}
 };
 int teachers::no_of_teachers = 11;
@@ -400,8 +435,14 @@ public:
 		string display_mode;
 		cout << string(100, '-') << endl;
 		while (getline(file, display_mode)) {
+			cout << display_mode << endl;
 		}
-		cout << display_mode;
+		_getch();
+	}
+	~teachers_management()
+	{
+
+		cout << "Destructor of teacher management class called \n";
 	}
 };
 class Exam {
@@ -475,6 +516,11 @@ public:
 		cout << "\tSubject not found or taught\n";
 		_getch();
 	}
+	~Exam()
+	{
+
+		cout << "Destructor of Exam class called \n";
+	}
 };
 class grades {
 protected:
@@ -506,10 +552,10 @@ public:
 	void assignGrades() {
 		system("cls");
 		ofstream MgradesFile("midtermgrades.txt", ios::app);
-		MgradesFile << "CLass," << "subject," << "grade," << "id" << "\n";
+		//MgradesFile << "CLass," << "subject," << "grade," << "id" << "\n";
 		ofstream FgradesFile("finalgrades.txt", ios::app);
 
-		FgradesFile << "CLass," << "subject," << "grade," << "id" << "\n";
+		//FgradesFile << "CLass," << "subject," << "grade," << "id" << "\n";
 		string Class;
 		system("cls");
 
@@ -594,7 +640,7 @@ public:
 							//	system("cls");
 						}
 						MgradesFile << midTermStudentGrades << endl;
-						FgradesFile << finalStudentGrades << endl;
+						FgradesFile <<"Class "<< finalStudentGrades << endl;
 						midTermGrades[k] = midTermStudentGrades;
 						finalGrades[k] = finalStudentGrades;
 						system("cls");
@@ -671,7 +717,8 @@ public:
 			}
 			else if (choice == 2) {
 				if (!idEntered) {
-
+					cout << "Enter the class of student: ";
+					cin >> Class;
 					cout << "Enter the ID of the student: ";
 					cin >> id;
 					cin.ignore();
@@ -707,6 +754,11 @@ public:
 			cout << endl;
 		}
 	}
+	~grades()
+	{
+
+		cout << "Destructor of grades class called \n";
+	}
 };
 
 
@@ -721,6 +773,8 @@ public:
 		this->count = count;
 	}
 	void functionalities() {
+		Exam exam(student, count);
+		grades grade(student, count);
 		ofstream file(attend);
 		int enter;
 		cout << "Do you want to login as a teacher? \n If yes press 1 else press 0\n";
@@ -770,6 +824,7 @@ public:
 						cout << endl;
 					}
 					else if (option == 3) {
+						cout << string(100, '-') << endl;
 						cout << "Enter id of particular student\n";
 						cin >> mark;
 						size_t record = student_attendence.find(mark);
@@ -779,17 +834,27 @@ public:
 						cout << mark << endl;
 					}
 					else if (option == 4) {
-						Exam exam(student, count);
+						cout << string(100, '-') << endl;
 						exam.conductExam();
 					}
 					else if (option == 5) {
-						grades grade(student, count);
-						grade.assignGrades();
+						cout << "Press 1 to assign grades to  whole class or 2 to display grades \n";
+						cin >> option;
+						cout << string(100, '-') << endl;
+						if (option == 1)
+							grade.assignGrades();
+						else if (option == 2)
+							grade.displayGrades();
 					}
 				}
 			}
 		}
 		file.close();
+	}
+	~teacher_functionalities()
+	{
+
+		cout << "Destructor of teacher_functionalities class called \n";
 	}
 };
 
@@ -1628,7 +1693,7 @@ public:
 				int i = 0;
 				while (getline(gradeFile, temp))
 				{
-					if (!(i == 0))
+					if (1)
 					{
 						if (temp == "\n")
 						{
@@ -1771,7 +1836,7 @@ public:
 				int i = 0;
 				while (getline(gradeFile, temp))
 				{
-					if (!(i == 0))
+					if (1)
 					{
 						if (temp == "\n")
 						{
@@ -1889,6 +1954,10 @@ public:
 			cout << endl;
 			return true;
 		}
+	}
+	~Alumni()
+	{
+		cout << "Destructor of alumni called \n";
 	}
 };
 
