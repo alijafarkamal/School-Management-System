@@ -415,6 +415,14 @@ int main()
 				}
 				else if (choice == 14) {
 					alumni.updateData();
+				system("CLS");					
+				setColor(14);
+				cout << "Alumni Data Updated!\n";
+				Sleep(1500);
+				setColor(15);
+				cout << "Updated Data Is: (If Any)\n";
+				Sleep(1500);
+				alumni.display();					
 				}
 				else if (choice == 15)
 				{
