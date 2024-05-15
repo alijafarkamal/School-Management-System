@@ -1,6 +1,10 @@
 ﻿
 #include "functions.h"
-using namespace std;
+/// <summary>
+///		This class "non-teaching-staff" manages non teaching staff like cook, 
+///		peon, guard etc. Bascially it reads their data from an excel sheet 
+///		and then populate the strings required for their proper implementation.	
+/// </summary>
 class non_teaching_staff {
 protected:
 	string other_staff_id;
@@ -49,6 +53,12 @@ public:
 	}
 };
 int non_teaching_staff::other_staff_number = 6;
+/// <summary>
+///			This class manages functionalities of non teaching staff and has methods to add,
+///			remove and update them. It has all the checks so that admin manages non teaching
+///			staff correctly. It inherits non_teaching_staff class as to have an easy access 
+///			io the strings which contains the whole data of non_teaching_staff.
+/// </summary>
 class non_teaching_staff_management : public non_teaching_staff {
 public:
 	non_teaching_staff_management() {
@@ -183,8 +193,19 @@ public:
 		_getch();
 	}
 };
+/// <summary>
+///			Main has initially all the objects of classes and then a menu 
+///			is given to the admin to run the system. Admin can opt for any 
+///			of the 15 main functionalities of the school management system.
+///			Main has implemented exception handling to catch unnecessary 
+///			errors. Data from student txt file is fed to all the objects 
+///			of classes that deal with students. 
+/// </summary>
+/// <returns></returns>
 int main()
 {
+
+
 	try {
 		Student_management_system* stu = new Student;
 		Student* pupil = dynamic_cast<Student*>(stu);
@@ -254,48 +275,32 @@ int main()
 \  /\  |  __| | (_| (_) | | | | | |  __/ | || (_) | | |  | | (_| | | | | | | |  | |  __| | | | |_| |
  \/  \/ \___|_|\___\___/|_| |_| |_|\___|  \__\___/  \_|  |_/\__,_|_|_| |_| \_|  |_/\___|_| |_|\__,_|
 )" << '\n';
-				//setColor(11);
-				//cout << "\t\t\tWELCOME TO MAIN MENU\n";
 				setColor(12);
 				cout << string(100, '-') << endl;
 				setColor(15);
 				cout << "1.  To Display Student Records\n";
-				//	cout << string(80, '-') << endl;
 				cout << "2.  To Display Details Of a Particular Student\n";
-				//cout << string(80, '-') << endl;
 				setColor(14);
 				cout << "3.  To Give and OverView\n";
 				setColor(15);
-				//	cout << string(80, '-') << endl;
 				cout << "4.  To Enter Financial Mode\n";
-				//	cout << string(80, '-') << endl;
 				setColor(14);
 				cout << "5.  To Enter A New Student\n";
-				setColor(15);
-				//	cout << string(80, '-') << endl;
-				cout << "6.  To Remove a Student\n";
-				//	cout << string(80, '-') << endl;
-				cout << "7.  To Edit Student Details\n";
-				//	cout << string(80, '-') << endl;
-				cout << "8.  To Make A Defaulter List\n";
-				//	cout << string(80, '-') << endl;
+				setColor(15);	
+				cout << "6.  To Remove a Student\n";	
+				cout << "7.  To Edit Student Details\n";		
+				cout << "8.  To Make A Defaulter List\n";			
 				setColor(14);
 				cout << "9.  To Enter as a teacher\n";
-				setColor(15);
-				//	cout << string(80, '-') << endl;
+				setColor(15);		
 				cout << "10. To Manage non-teaching staff\n";
-				//	cout << string(80, '-') << endl;
 				cout << "11. To Manage teachers\n";
-				//	cout << string(80, '-') << endl;
 				cout << "12. To Enter Monthly Fee Payment\n";
-				//cout << string(100, '-') << endl;
 				setColor(14);
 				cout << "13. To Enter Alumni Mode\n";
 				setColor(15);
-				//cout << string(80, '-') << endl;
 				cout << "14. To Update alumni data \n";
 				cout << "15. To Generate Monthly Report\n";
-				//cout << string(80, '-') << endl;
 				setColor(12);
 				cout << "Press -1 to exit\n";
 				cout << string(100, '-') << endl;

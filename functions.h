@@ -14,7 +14,7 @@ const string attend = "attendence.csv";
 const string file_other_staff = "non_teaching_staff.csv";
 const string file_teachers = "teachers.csv";
 
-// Function to set the cursor position in the console
+//This is the Function to set the cursor position in the console
 void setCursorPosition(int x, int y) {
 	COORD coord;
 	coord.X = x;
@@ -22,10 +22,11 @@ void setCursorPosition(int x, int y) {
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
 }
 
-// Function to set text color
+//This is the Function to set text color on console
 void setColor(int color) {
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color);
 }
+//This is An abstract class which is inherited in many following classes
 class Student_management_system {
 public:
 	virtual void student_info_set() = 0;
@@ -165,6 +166,14 @@ public:
 	}
 	
 };
+/// <summary>
+///			This class teachers as evident from its name has methods to 
+///			take data of teachers from an excel sheet 
+///			and then upload it in a database using SQL queries.
+///			Then display function takes data from the database formed 
+///			and populate all the strings which contain the
+///			relevant details of teachers like name, ids etc.
+/// </summary>
 class teachers {
 protected:
 	string str_teacher_heading;
@@ -288,13 +297,21 @@ public:
 		//cout << str_teacher_heading << endl << str_teacher_ids << endl << str_teacher_name << endl << str_teacher_leave << endl << str_teacher_class;
 		sqlite3_finalize(stmt);
 		sqlite3_close(db);
-		_getch();
+		//_getch();
 	}
 	~teachers()
 	{
 		cout << "Destructor of teacher class called \n";
 	}
 };
+/// <summary>
+///			Following is the class for teachers management. It has the 
+///         methods for adding teachers,removing teaches, updating data
+///         of teaches and displaying the whole data of teachers.
+///			Basically this class inherits teachers class and it is a 
+///			multilevel inheritance and accesses its memebers like 
+///         teachers's name, salary etc. 
+/// </summary>
 int teachers::no_of_teachers = 11;
 class teachers_management : public teachers {
 public:
@@ -537,6 +554,7 @@ public:
 	}
 };
 class grades {
+
 protected:
 	Student* student;
 	string subjects[5];
@@ -574,14 +592,13 @@ public:
 		system("cls");
 
 	l:
-		cout << string(100, '-') << endl;
-		cout << "\t\t\t\tEnter the class for which you want to assign grades:\n\t\t\t\t ";
+		cout << "Enter the class for which you want to assign grades : ";
 		cin >> Class;
 		bool classFound = false;
 		for (int i = 0; i < count; i++) {
 			if (Class == to_string(student[i].getClass())) {
 				classFound = true;
-				cout << "Available subjects for assigning grades:\n";
+				cout << "Subjects for assigning grades:\n";
 				for (int j = 0; j < 5; ++j) {
 					cout << j + 1 << " " << subjects[j] << endl;
 				}
@@ -593,24 +610,31 @@ public:
 						string finalStudentGrades;
 						for (int j = 0; j < 5; ++j) {
 							string chosenSubject = subjects[j];
-							cout << string(100, '-') << endl;
 							cout << "Subject: " << chosenSubject << endl;
-							cout << "Enter mid-term exam marks: ";
+							cout << "Enter mid-term exam marks:(Integer number only) ";
+
 							int midTermMarks;
+						x:
 							cin >> midTermMarks;
-							cout << "Enter final exam marks: ";
+							if (midTermMarks > 100 || midTermMarks < 0) {
+								cout << "enter the valid marks out of 100 (Integer number only)\n";
+								goto x;
+							}
+							cout << "Enter final exam marks:(Integer number only) ";
+
 							int finalExamMarks;
+						y:
 							cin >> finalExamMarks;
-							// Calculate the total marks (for demonstration purposes)
+							if (finalExamMarks > 100 || finalExamMarks < 0) {
+								cout << "enter the valid marks out of 100\n";
+								goto y;
+							}
 							int totalMidTermMarks = midTermMarks;
 							int totalFinalExamMarks = finalExamMarks;
 							string midTermGrade;
 							string finalGrade;
-							// Determine grades for mid-term and final exams
-							if (totalMidTermMarks > 100 || totalMidTermMarks < 0) {
-								midTermGrade = "Invalid";
-							}
-							else if (totalMidTermMarks >= 90) {
+
+							if (totalMidTermMarks >= 90) {
 								midTermGrade = "A";
 							}
 							else if (totalMidTermMarks >= 80 && totalMidTermMarks <= 89) {
@@ -626,10 +650,7 @@ public:
 								midTermGrade = "F";
 							}
 
-							if (totalFinalExamMarks > 100 || totalFinalExamMarks < 0) {
-								finalGrade = "Invalid";
-							}
-							else if (totalFinalExamMarks >= 90) {
+							if (totalFinalExamMarks >= 90) {
 								finalGrade = "A";
 							}
 							else if (totalFinalExamMarks >= 80 && totalFinalExamMarks <= 89) {
@@ -654,7 +675,7 @@ public:
 							//	system("cls");
 						}
 						MgradesFile << midTermStudentGrades << endl;
-						FgradesFile << finalStudentGrades << endl;
+						FgradesFile << "class" << finalStudentGrades << endl;
 						midTermGrades[k] = midTermStudentGrades;
 						finalGrades[k] = finalStudentGrades;
 						system("cls");
@@ -669,9 +690,14 @@ public:
 			cout << "Class not found.\n";
 			goto l;
 		}
-		//cout << midTermGrades[0];
+
 		system("cls");
 	}
+
+
+
+
+
 	void displayGrades() {
 		int choice;
 	l:
@@ -690,12 +716,12 @@ public:
 		for (int i = 0; i < count; i++) {
 			if (choice == 1) {
 				if (!idEntered) {
-					cout << string(100, '-') << endl;
+
 					cout << "Enter the class of student: ";
 					cin >> Class;
 					cout << "Enter the ID of the student: ";
 					cin >> id;
-					cout << "Class,Subject,Grade,ID\n";
+					cout << "Class,subject,grade,id\n";
 					cin.ignore();
 					idEntered = true;
 				}
@@ -715,14 +741,13 @@ public:
 					string lineId = midgrade.substr(pos3 + 1);
 
 					if (lineClass == Class && lineId == id) {
-						//	cout << "Subject: " << subject << ", Grade: " << grade << endl;
 						cout << midgrade << endl;
 						found = true;
 					}
 				}
 
 				if (!found) {
-					cout << "No grades found for the specified class and ID." << endl;
+					cout << "Student ID not found in mid grades or teacher has not marked the grade." << endl;
 				}
 				midtermFile.close();
 				if (!found) {
@@ -736,8 +761,7 @@ public:
 					cin >> Class;
 					cout << "Enter the ID of the student: ";
 					cin >> id;
-					cout << "Class,Subject,Grade,ID\n";
-
+					cout << "Class,subject,grade,id\n";
 					cin.ignore();
 					idEntered = true;
 				}
@@ -771,11 +795,7 @@ public:
 			cout << endl;
 		}
 	}
-	~grades()
-	{
 
-		cout << "Destructor of grades class called \n";
-	}
 };
 
 
@@ -1700,6 +1720,9 @@ public:
 					alumni_count++;
 				}
 			}
+
+
+
 			ifstream gradeFile("finalgrades.txt");
 
 			if (!gradeFile.fail())
@@ -1727,10 +1750,18 @@ public:
 						{
 							int pos = temp.rfind(',');
 							pos++;
-							string id = temp.substr(pos);
+							string id = temp.substr(pos,'\n');
 
 							int index = 0;
-							Search(students, count, index, stoi(id));
+							//long int idd = stoi(id);
+
+							cout << "\n\n";
+							cout << id << endl;
+							cout << "\n\n";//
+							int idd = stoi(id)
+							Search(students, count, index, 0);
+							//id.empty();
+
 							if (students[index].getClass() == 10)
 							{
 								bool is_unique = true;
@@ -1761,6 +1792,10 @@ public:
 				}
 			}
 		}
+
+
+
+
 		UpdatingData(students, count);
 		file.close();
 		ofstream file2("alumni.txt");

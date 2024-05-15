@@ -1,18 +1,25 @@
-10,math,A,1002
-10,urdu,A,1002
-10,eng,A,1002
-10,isl,A,1002
-10,science,A,1002
+10,math,A,0
+10,urdu,A,0
+10,eng,A,0
+10,isl,A,0
+10,science,A,0
 
-6,math,A,1009
-6,urdu,A,1009
-6,eng,A,1009
-6,isl,A,1009
-6,science,A,1009
+6,math,A,0
+6,urdu,A,0
+6,eng,A,0
+6,isl,A,0
+6,science,A,0
 
-10,math,A,1002
-10,urdu,A,1002
-10,isl,A,1002
-10,science,A,1002
-10,eng,A,1002
+10,math,A,0
+10,urdu,A,0
+10,isl,A,0
+10,science,A,0
+10,eng,A,0
+
+9,math,B,0
+9,urdu,B,0
+9,isl,B,0
+9,science,B,0
+9,eng,B,0
+
 
