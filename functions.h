@@ -33,17 +33,13 @@ public:
 	virtual int student_info_get() = 0;
 	virtual void teacher_info_set() = 0;
 	virtual int teacher_info_get() = 0;
-	~Student_management_system();
 };
-Student_management_system::~Student_management_system() {
-	//cout << "Destructor of SMS called \n";
-}
 class Student : public Student_management_system
 {
 private:
 	string name;
 	string FatherName;
-	int id;
+	int id; 
 	int fee;
 	int PendingBalance;
 	int Class;
@@ -476,12 +472,25 @@ public:
 		cout << "Destructor of teacher management class called \n";
 	}
 };
+/// <summary>
+///			This Exam class initializes subjects from a file, conducts exams for a specified class,
+///			and allows selection of exam type (midterm/final) and subject. If the chosen subject 
+///			is available, it proceeds with the exam; otherwise, it informs that the subject is not found.
+///			The class includes constructors to initialize subject data from a file and a destructor.
+/// </summary>
 class Exam {
 protected:
 	string subjects[5];
 	Student* student;
 	int count;
 public:
+
+	/// <summary>
+	///			IN THIS CLASS THERE IS TWO WORKS 
+	///			1.ASSIGN GRADES 2.DISPLAY GRADES
+	///			SUBJECTS ARE READING FROM .TXT FILE
+	///			STRORED IN STRING
+	/// </summary>
 	Exam() {
 
 	}
@@ -504,7 +513,14 @@ public:
 		//cout << subject[1];
 		file.close();
 	}
-
+	/// <summary>
+	//			This function opens files to store midterm and final grades, prompts the user to 
+	//			input class for grading, displays subjects for grading, and then allows the user 
+	//			to input midterm and final exam marks for each subject for all students in the selected
+	//		    class.Based on the marks, grades are assigned and stored in strings, which are then 
+	//			written into corresponding text files.The function includes checks for valid marks 
+	//			and handles cases where the entered class is not found.
+	/// </summary>
 	void conductExam() {
 		string Class;
 		cout << string(100, '-') << endl;
@@ -581,6 +597,12 @@ public:
 		file.close();
 	}
 
+		/// <summary>
+		///			This below function which prompts the user to enter either 1 for Midterm grades or 2 for Final grades.
+		///			It then asks for a student's class and ID. Based on the choice, it searches for the corresponding grades in either the midtermgrades.txt or finalgrades.txt files.
+		///			If found, it displays the grades; otherwise, it informs the user that the student's ID was not found or the teacher has not marked the grade. 
+		///			The function includes input validation and utilizes file handling to read the grades from text files.
+		/// </summary>
 	void assignGrades() {
 		system("cls");
 		ofstream MgradesFile("midtermgrades.txt", ios::app);
@@ -671,17 +693,13 @@ public:
 							cout << "Grade for student " << student[k].getname() << " in " << chosenSubject << " final exam: " << finalGrade << endl;
 							midTermStudentGrades += to_string(student[k].getClass()) + "," + chosenSubject + "," + midTermGrade + "," + to_string(student[k].getid()) + "\n";
 							finalStudentGrades += to_string(student[k].getClass()) + "," + chosenSubject + "," + finalGrade + "," + to_string(student[k].getid()) + "\n";
-
-							//	system("cls");
 						}
 						MgradesFile << midTermStudentGrades << endl;
-						FgradesFile << "class" << finalStudentGrades << endl;
+						FgradesFile  << finalStudentGrades << endl;
 						midTermGrades[k] = midTermStudentGrades;
 						finalGrades[k] = finalStudentGrades;
 						system("cls");
-
 					}
-
 				}
 				return;
 			}
@@ -798,7 +816,14 @@ public:
 
 };
 
-
+/// <summary>
+///			This class deals with the functionalities of teachers of the school and manages methods to mark
+///			1: attendence
+///			2: take exam
+///			3: to see previous attendences
+///			4: to see attendence of a particular student
+///			5: to assign grades
+/// </summary>
 class teacher_functionalities : public teachers_management, public Exam {
 	string student_attendence;
 	Student* student;
@@ -1008,13 +1033,6 @@ void Display(Student* students, int count)
 				if (Classes[i] == students[j].getClass())
 				{
 					cout << students[j] << endl;
-					//cout << "ID: " << students[j].getid() << endl;
-					//cout << "Class : " << students[j].getClass() << endl;
-					//cout << "Name: " << students[j].getname() << endl;
-					//cout << "Father Name: " << students[j].getfathername() << endl;
-					//cout << "Fee: " << students[j].getfee() << endl;
-					//cout << "Pending Balance : " << students[j].getPendingBalance() << endl;
-					//cout << endl;
 				}
 			}
 		}
@@ -1029,13 +1047,6 @@ void Display(Student* students, int count)
 			if (innerchoice == students[i].getClass())
 			{
 				cout << students[i] << endl;
-				//cout << "ID: " << students[i].getid() << endl;
-				//cout << "Class : " << students[i].getClass() << endl;
-				//cout << "Name: " << students[i].getname() << endl;
-				//cout << "Father Name: " << students[i].getfathername() << endl;
-				//cout << "Fee: " << students[i].getfee() << endl;
-				//cout << "Pending Balance : " << students[i].getPendingBalance() << endl;
-				//cout << endl;
 			}
 		}
 	}
@@ -1647,6 +1658,12 @@ void addMonthlyFee(Student* students, int count)
 	}
 }
 
+/// <summary>
+///			Class of Alumni, as evident from the name, represents the data related to the Alumni 
+///			of the institution. Alumni refers to
+///			1- Students who have passed out from the school
+///			2- Students who have left the school before completing the entire degree from the school
+/// </summary>
 
 
 class Alumni
@@ -1659,6 +1676,13 @@ class Alumni
 	vector<string> alumni_status;
 	int alumni_count = 0;
 public:
+	/// <summary>
+	///			The constructor of class reads the data from alumni.txt file (if present) 
+	///			and then fetches the data from it.
+	///			If the alumni.txt file is not present, it creates it.
+	///			It also reads data from finalgrades.txt to check if there is any student who 
+	///			is from grade 10th and has passed out i-e he/she becomes an alumni.
+	/// </summary>
 	Alumni()
 	{
 		Student* students;
@@ -1753,13 +1777,9 @@ public:
 							string id = temp.substr(pos,'\n');
 
 							int index = 0;
-							//long int idd = stoi(id);
+							//long int idd = ;
 
-							cout << "\n\n";
-							cout << id << endl;
-							cout << "\n\n";//
-							int idd = stoi(id)
-							Search(students, count, index, 0);
+							Search(students, count, index, stoi(id));
 							//id.empty();
 
 							if (students[index].getClass() == 10)
@@ -1807,6 +1827,9 @@ public:
 		}
 		file2.close();
 	}
+	/// <summary>
+	///			The function addAlumni() adds the alumni to the stored data
+	/// </summary>
 	void addAlumni(string id, string fee, string Class, string name, string father_name, string status)
 	{
 		alumni_name.push_back(name);
@@ -1816,6 +1839,9 @@ public:
 		alumni_class.push_back(Class);
 		alumni_status.push_back(status);
 	}
+	/// <summary>
+	///			The updateData() function updates the data according to the latest available data.
+	/// </summary>
 	void updateData()
 	{
 		Student* students;
@@ -1950,6 +1976,11 @@ public:
 		}
 		file2.close();
 	}
+	/// <summary>
+	///			he display() function displays the entire data of alumni in a presentable way.
+	///			This function has been overloaded (i-e Polymorphism) such that if an alumni ID 
+	///			is passed in its parameter, it prints the data of that particular student. (if present)
+	/// </summary>
 	void display()
 	{
 		system("CLS");

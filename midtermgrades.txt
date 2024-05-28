@@ -52,3 +52,9 @@
 6,science,A,1009
 6,eng,A,1009
 
+10,math,A,1002
+10,urdu,A,1002
+10,isl,A,1002
+10,science,A,1002
+10,eng,A,1002
+

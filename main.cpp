@@ -205,7 +205,6 @@ public:
 int main()
 {
 
-
 	try {
 		Student_management_system* stu = new Student;
 		Student* pupil = dynamic_cast<Student*>(stu);
