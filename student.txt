@@ -1,0 +1,9 @@
+1002 2000 -3000 10Huzaifa#Murab Ali#5000
+1004 80000 -3600 9Ali Jafar#Tahir Nawaz#0
+1006 1500 0 9Hassan Abaid#Hidayat Khan#0
+1007 2000 1000 5Yaseen#Wazeer Khan#0
+1008 1500 3000 5Afnan#Tahir Nawaz#0
+1009 1650 0 6Taha#Asif Nawaz#0
+1011 2000 1000 5Muaaz Kamboh#Shahid Nawaz#0
+1012 1400 0 2Ahmed#Tahir Nawaz#0
+1013 1750 50 2Trevis Head#Head Singh#0
